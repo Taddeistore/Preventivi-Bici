@@ -1108,13 +1108,7 @@ const CAT_FIELD = {
   'POTENZIOMETRO': 'testo',
   'RUOTE': 'ruote',
 };
-// Stato iniziale — verrà subito sovrascritto da loadFromCloud()
-let state = {
-  catalogo: JSON.parse(JSON.stringify(CATALOGO_INIZIALE)),
-  drafts: {},
-  preventivi: [],
-  config: { negozio_nome:'', negozio_indirizzo:'', negozio_tel:'', negozio_piva:'' }
-};
+// state definito sopra
 
 // === AUTH ===
 // === SYNC ===
