@@ -2,13 +2,12 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preventivi Bici — Taddei Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preventivi Bici — Officina</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Oswald:wght@400;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-
 :root {
   --bg: #0a0a0a;
   --bg-2: #141414;
@@ -1010,76 +1009,236 @@ select.note-riga-input option { background: var(--bg-3); color: var(--txt); }
   font-display: swap;
   src: local('Bebas Neue');
 }
-
 </style>
 </head>
 <body>
-<div id="sync-bar" style="position:fixed;top:0;left:0;right:0;z-index:999;background:var(--bg-2);border-bottom:1px solid var(--line);padding:4px 16px;font-size:12px;display:flex;align-items:center;gap:8px">
-  <span id="sync-dot" style="width:8px;height:8px;border-radius:50%;background:#ff9800;display:inline-block"></span>
-  <span id="sync-label">Caricamento dati...</span>
+
+
+
+<header class="app-header">
+  <div class="logo">
+    <img id="header-logo" class="header-logo" alt="Logo" />
+  </div>
+  <div class="logo-mark">PREVENTIVI<span>.BICI</span></div>
+  <nav class="tabs">
+    <button data-view="preventivo">Preventivo</button>
+    <button data-view="storico">Storico</button>
+    <button data-view="catalogo">Catalogo</button>
+    <button data-view="backup">Backup</button>
+  </nav>
+</header>
+
+<div id="sync-bar" style="display:flex;align-items:center;gap:8px;padding:6px 24px;background:var(--bg-2);border-bottom:1px solid var(--line);font-size:12px;color:var(--txt-mute)">
+  <div id="sync-dot" style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
+  <span id="sync-label">Connesso · dati in cloud</span>
 </div>
-<div style="height:28px"></div>
 
+<main>
+
+<!-- ============ PREVENTIVO ============ -->
+<section id="view-preventivo" class="view">
+  <h2 class="section-title">Nuovo <span>Preventivo</span> <span id="prev-stato" style="font-size:14px;letter-spacing:0.1em;margin-left:12px"></span></h2>
+
+  <div id="prev-discipline-tabs" class="discipline-tabs"></div>
+
+  <div class="preventivo-meta">
+    <div class="field">
+      <label>Cliente</label>
+      <input id="prev-cliente" type="text" placeholder="Nome cognome">
+    </div>
+    <div class="field">
+      <label>Operatore</label>
+      <input id="prev-operatore" type="text" placeholder="Chi fa il preventivo">
+    </div>
+    <div class="field">
+      <label>Data</label>
+      <input id="prev-data" type="date">
+    </div>
+    <div class="field">
+      <label>Note</label>
+      <input id="prev-note" type="text" placeholder="(opzionale)">
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn primary" onclick="salvaPreventivo()">Salva</button>
+      <button class="btn" onclick="stampaPreventivoCorrente()">Stampa</button>
+      <button class="btn ghost" onclick="nuovoPreventivoBtn()">+ Nuovo</button>
+      <button class="btn ghost" onclick="resetQuantitaPreventivo()">Azzera Q.tà</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input id="prev-search" type="search" placeholder="Cerca articolo o categoria…">
+    <label style="display:flex;align-items:center;gap:6px;color:var(--txt-dim);cursor:pointer">
+      <input id="prev-solo-attivi" type="checkbox"> Solo articoli con quantità
+    </label>
+    <button class="btn ghost small" onclick="resetTuttiMargini()" title="Ripristina tutti i margini al catalogo">↺ Margini</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Articolo</th>
+          <th>Specifiche</th>
+          <th class="num">P. Listino</th>
+          <th class="num">P. Acquisto</th>
+          <th class="num">Margine</th>
+          <th class="center">Q.tà</th>
+          <th class="num">C/Iva</th>
+          <th class="num">Scontato</th>
+        </tr>
+      </thead>
+      <tbody id="prev-tbody"></tbody>
+    </table>
+    <div id="prev-extra-voci" class="extra-voci-section"></div>
+  </div>
+
+  <div class="totals-block">
+    <div id="prev-totali" class="totals-grid"></div>
+    <div id="prev-versioni" class="versioni-panel" style="display:none"></div>
+  </div>
+
+  <div id="prev-riepilogo" class="riepilogo-block"></div>
+</section>
+
+<!-- ============ STORICO ============ -->
+<section id="view-storico" class="view">
+  <h2 class="section-title">Storico <span>Preventivi</span></h2>
+  <p class="section-sub">Tutti i preventivi salvati, ordinati per data.</p>
+  <div id="storico-list"></div>
+</section>
+
+<!-- ============ CATALOGO ============ -->
+<section id="view-catalogo" class="view">
+  <h2 class="section-title">Catalogo <span>Articoli</span></h2>
+  <p class="section-sub">Gestisci articoli, prezzi e margini per ogni disciplina. <span id="cat-count" class="muted"></span></p>
+
+  <div id="cat-discipline-tabs" class="discipline-tabs"></div>
+
+  <div class="toolbar">
+    <input id="cat-search" type="search" placeholder="Cerca articolo o categoria…">
+    <button class="btn primary" onclick="apriNuovoArticolo()">+ Nuovo Articolo</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Descrizione</th>
+          <th class="num">P. Listino</th>
+          <th class="num">P. Acquisto</th>
+          <th class="num">Margine</th>
+          <th class="num">Vendita Calcolato</th>
+          <th class="actions"></th>
+        </tr>
+      </thead>
+      <tbody id="cat-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ BACKUP ============ -->
+<section id="view-backup" class="view">
+  <h2 class="section-title">Backup &amp; <span>Configurazione</span></h2>
+  <p class="section-sub" id="backup-stats"></p>
+
+  <div class="backup-grid">
+
+    <div class="backup-card">
+      <h4>Dati Negozio</h4>
+      <p>Compaiono in cima al preventivo stampato.</p>
+      <div class="field"><label>Nome</label><input id="cfg-nome" type="text"></div>
+      <div class="field"><label>Indirizzo</label><input id="cfg-indirizzo" type="text"></div>
+      <div class="field-row">
+        <div class="field"><label>Telefono</label><input id="cfg-tel" type="text"></div>
+        <div class="field"><label>P.IVA</label><input id="cfg-piva" type="text"></div>
+      </div>
+      <button class="btn primary" onclick="salvaConfig()">Salva</button>
+    </div>
+
+    <div class="backup-card">
+      <h4>Esporta</h4>
+      <p>Salva un backup completo (catalogo + preventivi + configurazione) in un file JSON.</p>
+      <button class="btn primary" onclick="esportaBackup()">↓ Esporta Backup JSON</button>
+      <div style="height:8px"></div>
+      <button class="btn" onclick="esportaCSV()">↓ Esporta Catalogo CSV</button>
+    </div>
+
+    <div class="backup-card">
+      <h4>Importa</h4>
+      <p>Carica un backup JSON esportato in precedenza. Sovrascriverà tutti i dati attuali.</p>
+      <input id="backup-file-input" type="file" accept=".json" style="display:none">
+      <button class="btn" onclick="document.getElementById('backup-file-input').click()">↑ Importa Backup JSON</button>
+    </div>
+
+    <div class="backup-card">
+      <h4>Ripristino</h4>
+      <p>Ripristina il catalogo articoli al file Excel originale. I preventivi salvati restano.</p>
+      <button class="btn" onclick="ripristinaCatalogoIniziale()">⟲ Ripristina Catalogo Excel</button>
+      <div style="height:14px;border-top:1px solid var(--line);margin-top:14px"></div>
+      <button class="btn danger" onclick="cancellaTutto()">⚠ Cancella TUTTI i dati</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ STAMPA ============ -->
+<section id="view-stampa" class="view"></section>
+
+</main>
+
+<!-- ============ MODAL ARTICOLO ============ -->
+<div id="modal-articolo" class="modal-bg">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3 id="modal-art-title">NUOVO <span>ARTICOLO</span></h3>
+    <div class="field">
+      <label>Disciplina</label>
+      <select id="modal-art-disciplina">
+        <option>Strada</option>
+        <option>Crono</option>
+        <option>MTB</option>
+        <option>Gravel</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Categoria</label>
+      <input id="modal-art-categoria" type="text" list="cat-list-datalist" placeholder="es. RUOTE, DURA ACE…">
+      <datalist id="cat-list-datalist"></datalist>
+    </div>
+    <div class="field">
+      <label>Descrizione</label>
+      <input id="modal-art-descrizione" type="text" placeholder="es. Ruote CLX III">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>P. Listino (€)</label>
+        <input id="modal-art-listino" type="number" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label>P. Acquisto (€)</label>
+        <input id="modal-art-acquisto" type="number" step="0.01" min="0">
+      </div>
+    </div>
+    <div class="field">
+      <label>Margine (%)</label>
+      <input id="modal-art-margine" type="number" step="0.5" min="0" placeholder="25">
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="chiudiModalArt()">Annulla</button>
+      <button class="btn primary" onclick="salvaArticolo()">Salva</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ── Costanti ──────────────────────────────────────
+
+const SUPABASE_URL = 'https://sfofikurvddwgghloyjq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmb2Zpa3VydmRkd2dnaGxveWpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMDQ5NTUsImV4cCI6MjA5Nzg4MDk1NX0.EkF3ZNdNwryw_AuW9M_6l6cHcD5jHvbdYkTX3d8HUsg';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const CATALOGO_INIZIALE = {"Strada":{"articoli":[{"categoria":"TELAIO / BICI","descrizione":"Telaio Tarmac S-Works","prezzo_listino":5500.0,"prezzo_acquisto":3177.7,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio Tarmac S-Works Promo","prezzo_listino":5500.0,"prezzo_acquisto":2224.39,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio Aethos S-Works","prezzo_listino":5500.0,"prezzo_acquisto":3177.7,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio Tarmac Specialized","prezzo_listino":4000.0,"prezzo_acquisto":1684.0,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio Allez","prezzo_listino":1650.0,"prezzo_acquisto":851.53,"margine":0.25},{"categoria":"DURA ACE","descrizione":"Gruppo Completo","prezzo_listino":3221.0,"prezzo_acquisto":1857.0,"margine":0.25},{"categoria":"DURA ACE","descrizione":"Gruppo + PowerMeter","prezzo_listino":4782.0,"prezzo_acquisto":2342.0,"margine":0.25},{"categoria":"DURA ACE","descrizione":"Gruppo NO Guarnitura","prezzo_listino":3222.0,"prezzo_acquisto":1585.0,"margine":0.25},{"categoria":"DURA ACE","descrizione":"Solo Upgrade Kit","prezzo_listino":2696.0,"prezzo_acquisto":1339.0,"margine":0.25},{"categoria":"ULTEGRA","descrizione":"Gruppo Completo","prezzo_listino":2098.0,"prezzo_acquisto":1167.0,"margine":0.25},{"categoria":"ULTEGRA","descrizione":"Gruppo + PowerMeter","prezzo_listino":3155.0,"prezzo_acquisto":1547.0,"margine":0.25},{"categoria":"ULTEGRA","descrizione":"Gruppo NO Guarnitura","prezzo_listino":2098.0,"prezzo_acquisto":1027.0,"margine":0.25},{"categoria":"ULTEGRA","descrizione":"Solo Upgrade Kit Di2","prezzo_listino":1824.0,"prezzo_acquisto":899.0,"margine":0.25},{"categoria":"105 DI2","descrizione":"Gruppo Completo","prezzo_listino":1688.0,"prezzo_acquisto":819.0,"margine":0.25},{"categoria":"105 DI2","descrizione":"Gruppo NO Guarnitura","prezzo_listino":1528.0,"prezzo_acquisto":738.0,"margine":0.25},{"categoria":"105 DI2","descrizione":"Solo Upgrade Kit Di2","prezzo_listino":1351.0,"prezzo_acquisto":660.0,"margine":0.25},{"categoria":"105 MEC.","descrizione":"Gruppo Completo","prezzo_listino":996.0,"prezzo_acquisto":491.0,"margine":0.25},{"categoria":"105 MEC.","descrizione":"Gruppo NO Guarnitura","prezzo_listino":835.0,"prezzo_acquisto":410.0,"margine":0.25},{"categoria":"RED","descrizione":"Gruppo + PowerMeter","prezzo_listino":5067.35,"prezzo_acquisto":2645.98,"margine":0.25},{"categoria":"RED","descrizione":"Gruppo NO Powermater","prezzo_listino":0,"prezzo_acquisto":0,"margine":0.25},{"categoria":"FORCE","descrizione":"Gruppo + PowerMeter","prezzo_listino":2816.4,"prezzo_acquisto":1458.8,"margine":0.25},{"categoria":"FORCE","descrizione":"Gruppo NO Powermater","prezzo_listino":2416.4,"prezzo_acquisto":1240.82,"margine":0.25},{"categoria":"RIVAL","descrizione":"Gruppo + PowerMeter","prezzo_listino":1918.4,"prezzo_acquisto":987.91,"margine":0.25},{"categoria":"RIVAL","descrizione":"Gruppo NO Powermater","prezzo_listino":1758.4,"prezzo_acquisto":895.57,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Attacco Manubrio","prezzo_listino":149.0,"prezzo_acquisto":69.61,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Nastro Manubrio Supacaz","prezzo_listino":39.0,"prezzo_acquisto":18.22,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio Short","prezzo_listino":40.0,"prezzo_acquisto":18.69,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio Expert","prezzo_listino":69.0,"prezzo_acquisto":32.24,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio SL7","prezzo_listino":300.0,"prezzo_acquisto":197.0,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio SL8","prezzo_listino":580.0,"prezzo_acquisto":284.75,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio Roval Alpinist Cockpit II","prezzo_listino":579.0,"prezzo_acquisto":284.75,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio Roval Rapide Cockpit","prezzo_listino":579.0,"prezzo_acquisto":284.75,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella Base","prezzo_listino":99.0,"prezzo_acquisto":46.26,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella S-Works Power Evo","prezzo_listino":449.0,"prezzo_acquisto":209.78,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella S-Works Power","prezzo_listino":389.0,"prezzo_acquisto":181.74,"margine":0.25},{"categoria":"RUOTE","descrizione":"Ruote C38","prezzo_listino":1199.0,"prezzo_acquisto":589.67,"margine":0.35},{"categoria":"RUOTE","descrizione":"Ruote CL III","prezzo_listino":1798.0,"prezzo_acquisto":884.26,"margine":0.35},{"categoria":"RUOTE","descrizione":"Ruote CLX III","prezzo_listino":3498.0,"prezzo_acquisto":1720.32,"margine":0.35},{"categoria":"RUOTE","descrizione":"Ruote Sprint CLX III","prezzo_listino":3498.0,"prezzo_acquisto":1720.32,"margine":0.25},{"categoria":"RUOTE","descrizione":"Ruote Miche","prezzo_listino":1000.0,"prezzo_acquisto":443.0,"margine":0.35},{"categoria":"RUOTE","descrizione":"Bora Ultra 60/80","prezzo_listino":4280.0,"prezzo_acquisto":2354.0,"margine":0.2},{"categoria":"RUOTE","descrizione":"DT Swiss ARC 1100","prezzo_listino":1049.9,"prezzo_acquisto":563.14,"margine":0.35},{"categoria":"RUOTE","descrizione":"DT Swiss Lenticolare 1100","prezzo_listino":2399.0,"prezzo_acquisto":1287.22,"margine":0.35},{"categoria":"RUOTE","descrizione":"Copertoni S-Works","prezzo_listino":75.0,"prezzo_acquisto":35.04,"margine":0.35},{"categoria":"POTENZIOMETRO","descrizione":"Bracci Magene Carbonio","prezzo_listino":555.0,"prezzo_acquisto":325.0,"margine":0.35},{"categoria":"POTENZIOMETRO","descrizione":"Bracci Magene Alluminio","prezzo_listino":299.0,"prezzo_acquisto":169.0,"margine":0.35},{"categoria":"POTENZIOMETRO","descrizione":"Magene Carbonio","prezzo_listino":559.0,"prezzo_acquisto":355.0,"margine":0.35},{"categoria":"POTENZIOMETRO","descrizione":"Magene Alluminio","prezzo_listino":349.0,"prezzo_acquisto":199.0,"margine":0.35},{"categoria":"ACCESSORI","descrizione":"Mov. Cen. Ceramic Speed","prezzo_listino":389.0,"prezzo_acquisto":210.06,"margine":0.35},{"categoria":"ACCESSORI","descrizione":"Mov. Cen. Bikone","prezzo_listino":255.0,"prezzo_acquisto":140.25,"margine":0.35},{"categoria":"ACCESSORI","descrizione":"Gabbia Ceramic Speed","prezzo_listino":529.0,"prezzo_acquisto":285.66,"margine":0.35},{"categoria":"ACCESSORI","descrizione":"Gabbia Ceramic Speed Aero","prezzo_listino":679.0,"prezzo_acquisto":366.0,"margine":0.25},{"categoria":"ACCESSORI","descrizione":"Gabbia Ceramic Speed Team","prezzo_listino":579.0,"prezzo_acquisto":312.66,"margine":0.35}],"lavoro_officina_default":100},"Crono":{"articoli":[{"categoria":"TELAIO / BICI","descrizione":"Telaio Shiv","prezzo_listino":5999.0,"prezzo_acquisto":3466.63,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio Tarmac SL8","prezzo_listino":3999.0,"prezzo_acquisto":1684.0,"margine":0.25},{"categoria":"DURA ACE","descrizione":"Gruppo Completo","prezzo_listino":4330.0,"prezzo_acquisto":2192.0,"margine":0.25},{"categoria":"DURA ACE","descrizione":"Gruppo + PowerMeter","prezzo_listino":5450.0,"prezzo_acquisto":2726.0,"margine":0.25},{"categoria":"DURA ACE","descrizione":"Gruppo NO Guarnitura","prezzo_listino":3740.0,"prezzo_acquisto":1894.0,"margine":0.25},{"categoria":"ULTEGRA","descrizione":"Gruppo Completo","prezzo_listino":3064.0,"prezzo_acquisto":1554.0,"margine":0.25},{"categoria":"ULTEGRA","descrizione":"Gruppo + PowerMeter","prezzo_listino":3914.0,"prezzo_acquisto":1968.0,"margine":0.25},{"categoria":"ULTEGRA","descrizione":"Gruppo NO Guarnitura","prezzo_listino":2764.0,"prezzo_acquisto":1402.0,"margine":0.25},{"categoria":"105 DI2","descrizione":"Gruppo Completo","prezzo_listino":2591.0,"prezzo_acquisto":1317.0,"margine":0.25},{"categoria":"105 DI2","descrizione":"Gruppo NO Guarnitura","prezzo_listino":2415.0,"prezzo_acquisto":1229.0,"margine":0.25},{"categoria":"RED","descrizione":"Gruppo Completo","prezzo_listino":2767.5,"prezzo_acquisto":1588.9,"margine":0.25},{"categoria":"RED","descrizione":"Gruppo + PowerMeter","prezzo_listino":3649.45,"prezzo_acquisto":1738.4,"margine":0.25},{"categoria":"FORCE","descrizione":"Gruppo Completo","prezzo_listino":1948.45,"prezzo_acquisto":997.6,"margine":0.25},{"categoria":"FORCE","descrizione":"Gruppo + PowerMeter","prezzo_listino":2305.45,"prezzo_acquisto":1192.72,"margine":0.25},{"categoria":"RIVAL","descrizione":"Gruppo Completo","prezzo_listino":1468.45,"prezzo_acquisto":745.19,"margine":0.25},{"categoria":"RIVAL","descrizione":"Gruppo + PowerMeter","prezzo_listino":0,"prezzo_acquisto":0,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Attacco Manubrio","prezzo_listino":149.0,"prezzo_acquisto":69.61,"margine":0.35},{"categoria":"MANUBRIO","descrizione":"DEDA Manubrio CronoEvo","prezzo_listino":214.0,"prezzo_acquisto":125.0,"margine":0.35},{"categoria":"MANUBRIO","descrizione":"Manubrio Short","prezzo_listino":0,"prezzo_acquisto":0,"margine":0.35},{"categoria":"MANUBRIO","descrizione":"Manubrio Expert","prezzo_listino":0,"prezzo_acquisto":0,"margine":0.35},{"categoria":"MANUBRIO","descrizione":"Manubrio SL7","prezzo_listino":0,"prezzo_acquisto":0,"margine":0.35},{"categoria":"MANUBRIO","descrizione":"Manubrio SL8","prezzo_listino":0,"prezzo_acquisto":0,"margine":0.35},{"categoria":"MANUBRIO","descrizione":"Manubrio Roval Alpinist Cockpit II","prezzo_listino":579.0,"prezzo_acquisto":284.75,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio Roval Rapide Cockpit","prezzo_listino":579.0,"prezzo_acquisto":284.75,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella Base","prezzo_listino":99.0,"prezzo_acquisto":46.26,"margine":0.35},{"categoria":"SELLA","descrizione":"Sella Sitero ( Crono )","prezzo_listino":129.0,"prezzo_acquisto":60.27,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella S-Works Power Evo","prezzo_listino":449.0,"prezzo_acquisto":209.78,"margine":0.35},{"categoria":"SELLA","descrizione":"Sella S-Works Power","prezzo_listino":389.0,"prezzo_acquisto":181.74,"margine":0.35},{"categoria":"RUOTE","descrizione":"Ruote C38","prezzo_listino":1199.0,"prezzo_acquisto":589.67,"margine":0.35},{"categoria":"RUOTE","descrizione":"Ruote CL III","prezzo_listino":1798.0,"prezzo_acquisto":884.26,"margine":0.35},{"categoria":"RUOTE","descrizione":"Ruote CLX III","prezzo_listino":3498.0,"prezzo_acquisto":1720.32,"margine":0.35},{"categoria":"RUOTE","descrizione":"Ruote Sprint CLX III","prezzo_listino":3498.0,"prezzo_acquisto":1720.32,"margine":0.35},{"categoria":"RUOTE","descrizione":"Bora Ultra 60/80","prezzo_listino":4280.0,"prezzo_acquisto":2354.0,"margine":0.2},{"categoria":"RUOTE","descrizione":"DT Swiss ARC 1100","prezzo_listino":1049.9,"prezzo_acquisto":563.14,"margine":0.35},{"categoria":"RUOTE","descrizione":"DT Swiss Lenticolare 1100","prezzo_listino":2399.0,"prezzo_acquisto":1287.22,"margine":0.35},{"categoria":"RUOTE","descrizione":"Copertoni S-Works","prezzo_listino":70.0,"prezzo_acquisto":35.04,"margine":0.25},{"categoria":"POTENZIOMETRO","descrizione":"Bracci Magene Carbonio","prezzo_listino":555.0,"prezzo_acquisto":325.0,"margine":0.35},{"categoria":"POTENZIOMETRO","descrizione":"Bracci Magene Alluminio","prezzo_listino":299.0,"prezzo_acquisto":169.0,"margine":0.35},{"categoria":"POTENZIOMETRO","descrizione":"Magene Carbonio","prezzo_listino":559.0,"prezzo_acquisto":355.0,"margine":0.35},{"categoria":"POTENZIOMETRO","descrizione":"Magene Alluminio","prezzo_listino":349.0,"prezzo_acquisto":199.0,"margine":0.35},{"categoria":"ACCESSORI","descrizione":"Mov. Cen. Ceramic Speed","prezzo_listino":389.0,"prezzo_acquisto":210.06,"margine":0.35},{"categoria":"ACCESSORI","descrizione":"Mov. Cen. Bikone","prezzo_listino":255.0,"prezzo_acquisto":140.25,"margine":0.25},{"categoria":"ACCESSORI","descrizione":"Gabbia Ceramic Speed","prezzo_listino":529.0,"prezzo_acquisto":285.66,"margine":0.35},{"categoria":"ACCESSORI","descrizione":"Gabbia Ceramic Speed Aero","prezzo_listino":679.0,"prezzo_acquisto":366.0,"margine":0.25},{"categoria":"ACCESSORI","descrizione":"Gabbia Ceramic Speed Team","prezzo_listino":579.0,"prezzo_acquisto":312.66,"margine":0.35}],"lavoro_officina_default":100},"MTB":{"articoli":[{"categoria":"TELAIO / BICI","descrizione":"Telaio Epic 8 S – Works","prezzo_listino":5499.0,"prezzo_acquisto":3177.7,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio Epic 8 PRO EVO","prezzo_listino":3199.0,"prezzo_acquisto":1796.16,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio Chisel","prezzo_listino":1699.0,"prezzo_acquisto":877.35,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio Chisel Promo","prezzo_listino":1699.0,"prezzo_acquisto":679.95,"margine":0.25},{"categoria":"XTR","descrizione":"Gruppo Completo 9220","prezzo_listino":2531.0,"prezzo_acquisto":1232.0,"margine":0.25},{"categoria":"XTR","descrizione":"Gruppo Completo 9200","prezzo_listino":2590.0,"prezzo_acquisto":1265.0,"margine":0.25},{"categoria":"XTR","descrizione":"Up. Kit DI2","prezzo_listino":899.0,"prezzo_acquisto":454.0,"margine":0.25},{"categoria":"XTR","descrizione":"Up. Brake Kit 9200","prezzo_listino":529.0,"prezzo_acquisto":267.0,"margine":0.25},{"categoria":"XTR","descrizione":"Up. Brake Kit 9220","prezzo_listino":599.0,"prezzo_acquisto":302.0,"margine":0.25},{"categoria":"XT","descrizione":"Gruppo Completo 8200","prezzo_listino":1704.0,"prezzo_acquisto":830.0,"margine":0.25},{"categoria":"XT","descrizione":"Gruppo Completo 8220","prezzo_listino":1754.0,"prezzo_acquisto":855.0,"margine":0.25},{"categoria":"XT","descrizione":"Up. Kit DI2","prezzo_listino":713.0,"prezzo_acquisto":359.0,"margine":0.25},{"categoria":"XT","descrizione":"Up. Brake Kit 8200","prezzo_listino":389.0,"prezzo_acquisto":196.0,"margine":0.25},{"categoria":"XT","descrizione":"Up. Brake Kit 8220","prezzo_listino":429.0,"prezzo_acquisto":218.0,"margine":0.25},{"categoria":"DEORE","descrizione":"Gruppo Completo 2P","prezzo_listino":1103.0,"prezzo_acquisto":519.0,"margine":0.25},{"categoria":"DEORE","descrizione":"Gruppo Completo 4P","prezzo_listino":824.0,"prezzo_acquisto":542.0,"margine":0.25},{"categoria":"DEORE","descrizione":"Up. Kit DI2","prezzo_listino":545.0,"prezzo_acquisto":275.0,"margine":0.25},{"categoria":"XX","descrizione":"Gruppo Completo","prezzo_listino":2449.95,"prezzo_acquisto":1290.86,"margine":0.25},{"categoria":"XX","descrizione":"Gruppo + PowerMeter","prezzo_listino":2749.95,"prezzo_acquisto":1448.36,"margine":0.25},{"categoria":"XX SL","descrizione":"Gruppo Completo","prezzo_listino":2649.95,"prezzo_acquisto":1385.36,"margine":0.25},{"categoria":"XX SL","descrizione":"Gruppo + PowerMeter","prezzo_listino":3249.95,"prezzo_acquisto":1700.36,"margine":0.25},{"categoria":"XO","descrizione":"Gruppo Completo","prezzo_listino":1899.95,"prezzo_acquisto":978.56,"margine":0.25},{"categoria":"GX","descrizione":"Gruppo Completo","prezzo_listino":1299.95,"prezzo_acquisto":662.66,"margine":0.25},{"categoria":"S100","descrizione":"Gruppo Completo","prezzo_listino":325.7,"prezzo_acquisto":147.47,"margine":0.35},{"categoria":"S200","descrizione":"Gruppo Completo","prezzo_listino":585.0,"prezzo_acquisto":262.44,"margine":0.35},{"categoria":"S500 AXS","descrizione":"Gruppo Completo","prezzo_listino":1530.0,"prezzo_acquisto":1183.81,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Att. Man. Roval Control SL","prezzo_listino":149.0,"prezzo_acquisto":73.28,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio Alloy Mini Rise","prezzo_listino":60.0,"prezzo_acquisto":28.03,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Traverse SL 35","prezzo_listino":199.0,"prezzo_acquisto":97.87,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Roval Control SL 35","prezzo_listino":149.0,"prezzo_acquisto":73.28,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Roval Control SL Int.","prezzo_listino":419.0,"prezzo_acquisto":206.06,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella Base","prezzo_listino":99.0,"prezzo_acquisto":46.26,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella S-Works Power Evo","prezzo_listino":449.0,"prezzo_acquisto":209.78,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella S-Works Power","prezzo_listino":389.0,"prezzo_acquisto":181.74,"margine":0.25},{"categoria":"RUOTE","descrizione":"Roval Control World Cup","prezzo_listino":2950.0,"prezzo_acquisto":1454.82,"margine":0.25},{"categoria":"RUOTE","descrizione":"Roval Control SL VI Solix","prezzo_listino":2550.0,"prezzo_acquisto":1254.1,"margine":0.25},{"categoria":"RUOTE","descrizione":"Roval Control SL V 370","prezzo_listino":1148.0,"prezzo_acquisto":564.59,"margine":0.25},{"categoria":"RUOTE","descrizione":"Roval Traverse Alloy 29","prezzo_listino":0,"prezzo_acquisto":0,"margine":0.25},{"categoria":"RUOTE","descrizione":"Copertoni","prezzo_listino":0,"prezzo_acquisto":0,"margine":0.25}],"lavoro_officina_default":150},"Gravel":{"articoli":[{"categoria":"TELAIO / BICI","descrizione":"Telaio S-Works Crux 5 FACT 12r 2027","prezzo_listino":5799.0,"prezzo_acquisto":3351.06,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio S-Works Crux FACT 12r 2026","prezzo_listino":4749.0,"prezzo_acquisto":1921.01,"margine":0.25},{"categoria":"TELAIO / BICI","descrizione":"Telaio Crux FACT 10r 2026","prezzo_listino":3149.0,"prezzo_acquisto":1414.47,"margine":0.25},{"categoria":"GRX400","descrizione":"Gruppo Completo 2x10","prezzo_listino":830.0,"prezzo_acquisto":422.0,"margine":0.25},{"categoria":"GRX600","descrizione":"Gruppo Completo 1x11","prezzo_listino":939.0,"prezzo_acquisto":461.0,"margine":0.25},{"categoria":"GRX600","descrizione":"Gruppo Completo 2x11","prezzo_listino":1000.0,"prezzo_acquisto":492.0,"margine":0.25},{"categoria":"GRX610","descrizione":"Gruppo Completo 1x12","prezzo_listino":1112.0,"prezzo_acquisto":555.0,"margine":0.25},{"categoria":"GRX610","descrizione":"Gruppo Completo 2x12","prezzo_listino":1191.0,"prezzo_acquisto":596.0,"margine":0.25},{"categoria":"GRX717 DI2","descrizione":"Gruppo Completo 1x12","prezzo_listino":1284.0,"prezzo_acquisto":628.0,"margine":0.25},{"categoria":"GRX810","descrizione":"Gruppo Completo 1x11","prezzo_listino":1234.0,"prezzo_acquisto":614.0,"margine":0.25},{"categoria":"GRX810","descrizione":"Gruppo Completo 2x11","prezzo_listino":1323.0,"prezzo_acquisto":658.0,"margine":0.25},{"categoria":"GRX815 DI2","descrizione":"Gruppo Completo 1x11","prezzo_listino":1748.0,"prezzo_acquisto":823.0,"margine":0.25},{"categoria":"GRX815 DI2","descrizione":"Gruppo Completo 2x12","prezzo_listino":2003.0,"prezzo_acquisto":952.0,"margine":0.25},{"categoria":"GRX820","descrizione":"Gruppo Completo 1x12","prezzo_listino":1311.0,"prezzo_acquisto":651.0,"margine":0.25},{"categoria":"GRX820","descrizione":"Gruppo Completo 2x12","prezzo_listino":1379.0,"prezzo_acquisto":686.0,"margine":0.25},{"categoria":"GRX825 DI2","descrizione":"Gruppo Completo 2x12","prezzo_listino":2185.0,"prezzo_acquisto":1072.0,"margine":0.25},{"categoria":"GRX827 DI2","descrizione":"Gruppo Completo 1x12","prezzo_listino":1865.0,"prezzo_acquisto":920.0,"margine":0.25},{"categoria":"RED XPLR","descrizione":"Gruppo Completo","prezzo_listino":4131.45,"prezzo_acquisto":2142.54,"margine":0.25},{"categoria":"RED XPLR","descrizione":"Gruppo + PowerMeter","prezzo_listino":4636.45,"prezzo_acquisto":2418.48,"margine":0.25},{"categoria":"FORCE XPLR","descrizione":"Gruppo Completo","prezzo_listino":2171.45,"prezzo_acquisto":1109.4,"margine":0.25},{"categoria":"FORCE XPLR","descrizione":"Gruppo + PowerMeter","prezzo_listino":2396.45,"prezzo_acquisto":1231.8,"margine":0.25},{"categoria":"RIVAL XPLR","descrizione":"Gruppo Completo","prezzo_listino":1611.45,"prezzo_acquisto":815.85,"margine":0.25},{"categoria":"RIVAL XPLR","descrizione":"Gruppo + PowerMeter","prezzo_listino":1791.45,"prezzo_acquisto":917.19,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Attacco Manubrio","prezzo_listino":149.0,"prezzo_acquisto":69.61,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio Roval Terra","prezzo_listino":319.0,"prezzo_acquisto":156.89,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio SL8","prezzo_listino":580.0,"prezzo_acquisto":284.75,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio Roval Alpinist Cockpit II","prezzo_listino":579.0,"prezzo_acquisto":284.75,"margine":0.25},{"categoria":"MANUBRIO","descrizione":"Manubrio Roval Rapide Cockpit","prezzo_listino":579.0,"prezzo_acquisto":284.75,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella Base","prezzo_listino":99.0,"prezzo_acquisto":46.26,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella S-Works Power Evo","prezzo_listino":449.0,"prezzo_acquisto":209.78,"margine":0.25},{"categoria":"SELLA","descrizione":"Sella S-Works Power","prezzo_listino":389.0,"prezzo_acquisto":181.74,"margine":0.25},{"categoria":"RUOTE","descrizione":"Ruote Roval Terra CL","prezzo_listino":2598.0,"prezzo_acquisto":1277.7,"margine":0.25},{"categoria":"RUOTE","descrizione":"Ruote Terra CLX II","prezzo_listino":1798.0,"prezzo_acquisto":884.26,"margine":0.25},{"categoria":"RUOTE","descrizione":"Copertoni","prezzo_listino":0,"prezzo_acquisto":0,"margine":0.25}],"lavoro_officina_default":150}};
-const LOGO_AZIENDA = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMsAAABLCAMAAADplYPZAAAAAXNSR0IB2cksfwAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAvFQTFRFAgBcAAAA////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Z4NtPAAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH6gITCRwnD8vq7AAABCdJREFUaN7tW0uW2zAM48P9D93NxLFIAKRlTxettcrEiERI/MsT8RmwQ8FiHeaHDW4OPPD692Ky9DCtCYVbZDHzLUBGxQikxR9yiWtcfsSMCY4AYQTSuwpznl9kQhVqEFqGsgf7uM/CZ1kucMGUi5ikSIm7OKzPiooZLgJEzAcTIfViicwuF0y4oOFi3c5k41ac4oLY5HIoI/GDYy4LtsGh1VlvLgMuFZNdoZMRize8h7tv+oiOi4+43/PFDLdv+iXSpodMAs2FhG2qqyy8H1qGEHmB53Kap36Uu65t7jhMpqxEPTqlJvuyz4UqkPagwUQ4uExxioszF64lvTEsGNStSjLEZ1sqDi0OU0kZAr1zWLmw6bFaIDhniguuJD+hN3T6wbQkvP5YLmA+68hvO59FuJQkeZuLUt2VC/u+whUXh0PdkF0uaXfjJheKw5TLTdPPEYEZFe5xCTgcRmc7Mf0iJuXCpy9c8AyXbRVL1tIKrfJDk0j583vMXEoEjS4RVNtduAw5P8glO7ELXEC4tJwtl1umj5pwsjptZPqYubvCubZg9kx/yKWPGsb0SQ7zG5HSVyWn/LyL+sRcThVNeFf1TAbTFE601sC332VV/YhWMePc51oWMS4WyTaysoTjoouGTyT8TT0r6ibaDo6qHhwXcIkltk0fbdccou7lTRsQGenu7NXHTsW6Y6FcXK+oxbFCDCO33nKJMZcRlck5o2uN9VxAPZHU2tk2lg4eZlQ223zO9JkV5GZHNQPXjLyLi13TzwmILpPhr7BE8DQd9L02nzEX1Qi5xGW5JPK4JXF6lotr2c7qJuTrLnNDM7oJGJt+7slCPoe9OzQXd7dx9nKPy1rlMzedEHekzGXoy+LxpWuVtLl9rmfswN1NenPH/dRd+Dve8Y7/dzzqE9Q8m4vgMhP9es3etshVri6Cq1zKJ9w8FPI2D7pze4LLWp/f5sIlYIv8irH0olzV7n+Dy+Bc4u9wKf4mNUxWRwFlFs5chJv4dt3X/BvUpSgPwxZGsuRz9U8e5ALATKmOEEf7cs3VQeVQqwep5bNbS04bgN4HmYaLLSz7VU4Y65dm9erzqzdLGwHIQ4UNlTIQoIQDfMtBelZN8aINeDWD8mBAJS+CoHaRPCF5bdGtTqT4qjCvmeVs9SVDdTjQXHCfS9Gt4kZ5/1dYsy5ywabIXJapTMk5TECKdndcFhV0qsa4ZK7syDoukNFBctFaKnwZ8SwIqzfQXNxZXODSWZzyAJe4nFtUuM/F71VVCMal61dBmP7SNSpQ6NVFNtZygRay5QIaMng3D6nlCB/cUCQAVGQWIZt8XbjURcDFXYODlYNmSqmqPOdzLLv4fAW+LyzIsEVw/gklvmIh/rSFeH4lgViWzJL1f0yI61avqrxJ+3Ys3/GOd7zjHe/YGn8A7WAqe+rIo60AAAAASUVORK5CYII=';
-
-// ── Stato app ─────────────────────────────────────
-let state = {
-  catalogo: JSON.parse(JSON.stringify(CATALOGO_INIZIALE)),
-  preventivi: [],
-  drafts: {},
-  config: {negozio_nome:'',negozio_indirizzo:'',negozio_tel:'',negozio_piva:''}
-};
-
-// ── Sync status ───────────────────────────────────
-function setSyncStatus(s, msg) {
-  const dot = document.getElementById('sync-dot');
-  const lbl = document.getElementById('sync-label');
-  if (!dot) return;
-  if (s==='ok')      { dot.style.background='#4caf50'; lbl.textContent=msg||'Dati aggiornati ✓'; }
-  else if (s==='syncing') { dot.style.background='#ff9800'; lbl.textContent=msg||'Caricamento...'; }
-  else               { dot.style.background='#f44336'; lbl.textContent=msg||'Errore connessione'; }
-}
-
-// ── Cloud: legge dati.json da GitHub ─────────────
-async function loadFromCloud() {
-  setSyncStatus('syncing', 'Caricamento dati...');
-  try {
-    const url = 'https://raw.githubusercontent.com/taddeistore/Preventivi-Bici/main/dati.json?t=' + Date.now();
-    const r = await fetch(url);
-    if (r.ok) {
-      const d = await r.json();
-      if (d.catalogo && Object.keys(d.catalogo).length > 0) state.catalogo = d.catalogo;
-      if (d.preventivi) state.preventivi = d.preventivi;
-      if (d.drafts) state.drafts = d.drafts;
-      if (d.config) state.config = d.config;
-      setSyncStatus('ok', 'Dati aggiornati ✓');
-    } else {
-      setSyncStatus('ok', 'Catalogo locale');
-    }
-  } catch(e) {
-    setSyncStatus('ok', 'Catalogo locale');
-  }
-}
-
-// ── Salvataggio: solo lettura dal web ─────────────
-async function saveStateCloud() {
-  setSyncStatus('error', '⚠ Avvia il programma sul PC del negozio per salvare');
-  setTimeout(() => setSyncStatus('ok', 'Sola lettura'), 3000);
-}
-async function savePreventivoCloud(p) { await saveStateCloud(); }
-async function deletePreventivoCloud(id) { await saveStateCloud(); }
-function saveState() { saveStateCloud(); }
-
-// ── Codice app ────────────────────────────────────
-
-
-
-
-
-
 
 // === STATE ===
 const STORAGE_KEY = 'preventivi_bici_v1';
@@ -1108,7 +1267,13 @@ const CAT_FIELD = {
   'POTENZIOMETRO': 'testo',
   'RUOTE': 'ruote',
 };
-// state definito sopra
+// Stato iniziale — verrà subito sovrascritto da loadFromCloud()
+let state = {
+  catalogo: JSON.parse(JSON.stringify(CATALOGO_INIZIALE)),
+  drafts: {},
+  preventivi: [],
+  config: { negozio_nome:'', negozio_indirizzo:'', negozio_tel:'', negozio_piva:'' }
+};
 
 // === AUTH ===
 // === SYNC ===
@@ -1121,7 +1286,10 @@ function setSyncStatus(s) {
   else { dot.style.background='var(--green)'; lbl.textContent='Connesso · dati in cloud'; }
 }
 
-async function loadFromCloud() {} = await sb.from('app_state').select('*');
+async function loadFromCloud() {
+  setSyncStatus('syncing');
+  try {
+    const {data: appData} = await sb.from('app_state').select('*');
     if (appData) {
       for (const row of appData) {
         // Il catalogo NON viene caricato da Supabase — sta nel file HTML
@@ -1149,12 +1317,10 @@ async function loadFromCloud() {} = await sb.from('app_state').select('*');
 }
 
 async function saveStateCloud() {
-  setSyncStatus('syncing');
+  lastLocalSave = Date.now();
   try {
-    const r = await fetch('/api/salva', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)});
-    setSyncStatus(r.ok?'ok':'error');
-  } catch(e) { setSyncStatus('error'); }
-};
+    // Costruisce margini_custom: solo i margini che differiscono dal CATALOGO_INIZIALE
+    const mc = {};
     for (const disc of Object.keys(state.catalogo)) {
       for (const [idx, art] of state.catalogo[disc].articoli.entries()) {
         const orig = CATALOGO_INIZIALE[disc] && CATALOGO_INIZIALE[disc].articoli[idx];
@@ -1172,12 +1338,20 @@ async function saveStateCloud() {
   } catch(e) { setSyncStatus('error'); console.error('saveStateCloud error:', e); }
 }
 
-async function savePreventivoCloud(prev) { await saveStateCloud(); });
+async function savePreventivoCloud(prev) {
+  setSyncStatus('syncing');
+  try {
+    await sb.from('preventivi').upsert({
+      id: prev.id, cliente: prev.cliente||'', data: prev.data||'',
+      note: prev.note||'', disciplina: prev.disciplina||'',
+      data_json: prev, updated_at: new Date().toISOString(),
+    });
     setSyncStatus('ok');
   } catch(e) { setSyncStatus('error'); }
 }
 
-async function deletePreventivoCloud(id) { await saveStateCloud(); } catch(e) {}
+async function deletePreventivoCloud(id) {
+  try { await sb.from('preventivi').delete().eq('id', id); } catch(e) {}
 }
 
 let currentView = 'preventivo';
@@ -1186,8 +1360,8 @@ let currentDisciplinaPreventivo = 'Strada';
 let editandoArticolo = null;
 let stampaCorrente = null;
 let stampaVersioneCliente = true;
-// timestamp dell'ultimo salvataggio locale
-
+let lastLocalSave = 0; // timestamp dell'ultimo salvataggio locale
+const LOGO_AZIENDA = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMsAAABLCAMAAADplYPZAAAAAXNSR0IB2cksfwAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAvFQTFRFAgBcAAAA////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Z4NtPAAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH6gITCRwnD8vq7AAABCdJREFUaN7tW0uW2zAM48P9D93NxLFIAKRlTxettcrEiERI/MsT8RmwQ8FiHeaHDW4OPPD692Ky9DCtCYVbZDHzLUBGxQikxR9yiWtcfsSMCY4AYQTSuwpznl9kQhVqEFqGsgf7uM/CZ1kucMGUi5ikSIm7OKzPiooZLgJEzAcTIfViicwuF0y4oOFi3c5k41ac4oLY5HIoI/GDYy4LtsGh1VlvLgMuFZNdoZMRize8h7tv+oiOi4+43/PFDLdv+iXSpodMAs2FhG2qqyy8H1qGEHmB53Kap36Uu65t7jhMpqxEPTqlJvuyz4UqkPagwUQ4uExxioszF64lvTEsGNStSjLEZ1sqDi0OU0kZAr1zWLmw6bFaIDhniguuJD+hN3T6wbQkvP5YLmA+68hvO59FuJQkeZuLUt2VC/u+whUXh0PdkF0uaXfjJheKw5TLTdPPEYEZFe5xCTgcRmc7Mf0iJuXCpy9c8AyXbRVL1tIKrfJDk0j583vMXEoEjS4RVNtduAw5P8glO7ELXEC4tJwtl1umj5pwsjptZPqYubvCubZg9kx/yKWPGsb0SQ7zG5HSVyWn/LyL+sRcThVNeFf1TAbTFE601sC332VV/YhWMePc51oWMS4WyTaysoTjoouGTyT8TT0r6ibaDo6qHhwXcIkltk0fbdccou7lTRsQGenu7NXHTsW6Y6FcXK+oxbFCDCO33nKJMZcRlck5o2uN9VxAPZHU2tk2lg4eZlQ223zO9JkV5GZHNQPXjLyLi13TzwmILpPhr7BE8DQd9L02nzEX1Qi5xGW5JPK4JXF6lotr2c7qJuTrLnNDM7oJGJt+7slCPoe9OzQXd7dx9nKPy1rlMzedEHekzGXoy+LxpWuVtLl9rmfswN1NenPH/dRd+Dve8Y7/dzzqE9Q8m4vgMhP9es3etshVri6Cq1zKJ9w8FPI2D7pze4LLWp/f5sIlYIv8irH0olzV7n+Dy+Bc4u9wKf4mNUxWRwFlFs5chJv4dt3X/BvUpSgPwxZGsuRz9U8e5ALATKmOEEf7cs3VQeVQqwep5bNbS04bgN4HmYaLLSz7VU4Y65dm9erzqzdLGwHIQ4UNlTIQoIQDfMtBelZN8aINeDWD8mBAJS+CoHaRPCF5bdGtTqT4qjCvmeVs9SVDdTjQXHCfS9Gt4kZ5/1dYsy5ywabIXJapTMk5TECKdndcFhV0qsa4ZK7syDoukNFBctFaKnwZ8SwIqzfQXNxZXODSWZzyAJe4nFtUuM/F71VVCMal61dBmP7SNSpQ6NVFNtZygRay5QIaMng3D6nlCB/cUCQAVGQWIZt8XbjURcDFXYODlYNmSqmqPOdzLLv4fAW+LyzIsEVw/gklvmIh/rSFeH4lgViWzJL1f0yI61avqrxJ+3Ys3/GOd7zjHe/YGn8A7WAqe+rIo60AAAAASUVORK5CYII=';
 
 // === STORAGE ===
 function makeEmptyDraft(disc) {
@@ -1225,7 +1399,9 @@ function ensureDraft(disc) {
   if (!state.drafts[disc].margine_override) state.drafts[disc].margine_override = {};
   return state.drafts[disc];
 }
-function saveState() { saveStateCloud(); }
+function saveState() {
+  saveStateCloud();
+}
 
 // === UTILS ===
 function fmtEur(n) {
@@ -2627,7 +2803,7 @@ function esportaCSV() {
   if (!session) {
     await sb.auth.signInAnonymously();
   }
-
+  await loadFromCloud();
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2702,23 +2878,49 @@ window.esportaDati = esportaDati;
 window.importaDati = importaDati;
 window.salvaConfig = salvaConfig;
 
+// === AGGIORNAMENTO AUTOMATICO IN TEMPO REALE ===
+// Polling ogni 30 secondi: aggiorna catalogo e preventivi da Supabase
+// Non sovrascrive se abbiamo salvato localmente negli ultimi 10 secondi
+setInterval(async () => {
+  if (document.hidden || !state) return;
+  if (Date.now() - lastLocalSave < 10000) return;
+  try {
+    const {data} = await sb.from('app_state').select('key,value');
+    if (data) for (const row of data) {
+      if (row.key === 'config') state.config = row.value;
+      if (row.key === 'drafts') state.drafts = row.value || {};
+      if (row.key === 'margini_custom') {
+        const mc = row.value || {};
+        for (const disc of Object.keys(mc)) {
+          if (!state.catalogo[disc]) continue;
+          for (const [idx, margine] of Object.entries(mc[disc])) {
+            if (state.catalogo[disc].articoli[idx]) {
+              state.catalogo[disc].articoli[idx].margine = margine;
+            }
+          }
+        }
+      }
+    }
+    const {data: pData} = await sb.from('preventivi').select('id,data_json').order('updated_at', {ascending:false});
+    if (pData) state.preventivi = pData.map(r => r.data_json);
+    if (currentView === 'preventivo') renderPreventivo();
+    if (currentView === 'storico') renderStorico();
+    if (currentView === 'catalogo') renderCatalogo();
+  } catch(e) {}
+}, 30000);
 
-
-// ── Avvio ─────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', async () => {
-  await loadFromCloud();
-  if (typeof setView === 'function') setView('preventivo');
+// Ricarica quando la finestra torna in primo piano
+// ma solo se non abbiamo salvato di recente
+document.addEventListener('visibilitychange', async () => {
+  if (!document.hidden && state && (Date.now() - lastLocalSave > 10000)) {
+    await loadFromCloud();
+    if (currentView === 'preventivo') renderPreventivo();
+    if (currentView === 'storico') renderStorico();
+    if (currentView === 'catalogo') renderCatalogo();
+  }
 });
 
-// Aggiorna ogni 60 secondi
-setInterval(async () => {
-  await loadFromCloud();
-  if (typeof currentView !== 'undefined') {
-    if (currentView==='preventivo' && typeof renderPreventivo==='function') renderPreventivo();
-    if (currentView==='storico' && typeof renderStorico==='function') renderStorico();
-    if (currentView==='catalogo' && typeof renderCatalogo==='function') renderCatalogo();
-  }
-}, 60000);
 </script>
+
 </body>
 </html>
