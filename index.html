@@ -1304,6 +1304,7 @@ async function loadFromCloud() {
 }
 
 async function saveStateCloud() {
+  lastLocalSave = Date.now();
   try {
     await sb.from('app_state').upsert([
       {key:'catalogo', value:state.catalogo, updated_at:new Date().toISOString()},
@@ -1335,6 +1336,7 @@ let currentDisciplinaPreventivo = 'Strada';
 let editandoArticolo = null;
 let stampaCorrente = null;
 let stampaVersioneCliente = true;
+let lastLocalSave = 0; // timestamp dell'ultimo salvataggio locale
 const LOGO_AZIENDA = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMsAAABLCAMAAADplYPZAAAAAXNSR0IB2cksfwAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAvFQTFRFAgBcAAAA////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Z4NtPAAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH6gITCRwnD8vq7AAABCdJREFUaN7tW0uW2zAM48P9D93NxLFIAKRlTxettcrEiERI/MsT8RmwQ8FiHeaHDW4OPPD692Ky9DCtCYVbZDHzLUBGxQikxR9yiWtcfsSMCY4AYQTSuwpznl9kQhVqEFqGsgf7uM/CZ1kucMGUi5ikSIm7OKzPiooZLgJEzAcTIfViicwuF0y4oOFi3c5k41ac4oLY5HIoI/GDYy4LtsGh1VlvLgMuFZNdoZMRize8h7tv+oiOi4+43/PFDLdv+iXSpodMAs2FhG2qqyy8H1qGEHmB53Kap36Uu65t7jhMpqxEPTqlJvuyz4UqkPagwUQ4uExxioszF64lvTEsGNStSjLEZ1sqDi0OU0kZAr1zWLmw6bFaIDhniguuJD+hN3T6wbQkvP5YLmA+68hvO59FuJQkeZuLUt2VC/u+whUXh0PdkF0uaXfjJheKw5TLTdPPEYEZFe5xCTgcRmc7Mf0iJuXCpy9c8AyXbRVL1tIKrfJDk0j583vMXEoEjS4RVNtduAw5P8glO7ELXEC4tJwtl1umj5pwsjptZPqYubvCubZg9kx/yKWPGsb0SQ7zG5HSVyWn/LyL+sRcThVNeFf1TAbTFE601sC332VV/YhWMePc51oWMS4WyTaysoTjoouGTyT8TT0r6ibaDo6qHhwXcIkltk0fbdccou7lTRsQGenu7NXHTsW6Y6FcXK+oxbFCDCO33nKJMZcRlck5o2uN9VxAPZHU2tk2lg4eZlQ223zO9JkV5GZHNQPXjLyLi13TzwmILpPhr7BE8DQd9L02nzEX1Qi5xGW5JPK4JXF6lotr2c7qJuTrLnNDM7oJGJt+7slCPoe9OzQXd7dx9nKPy1rlMzedEHekzGXoy+LxpWuVtLl9rmfswN1NenPH/dRd+Dve8Y7/dzzqE9Q8m4vgMhP9es3etshVri6Cq1zKJ9w8FPI2D7pze4LLWp/f5sIlYIv8irH0olzV7n+Dy+Bc4u9wKf4mNUxWRwFlFs5chJv4dt3X/BvUpSgPwxZGsuRz9U8e5ALATKmOEEf7cs3VQeVQqwep5bNbS04bgN4HmYaLLSz7VU4Y65dm9erzqzdLGwHIQ4UNlTIQoIQDfMtBelZN8aINeDWD8mBAJS+CoHaRPCF5bdGtTqT4qjCvmeVs9SVDdTjQXHCfS9Gt4kZ5/1dYsy5ywabIXJapTMk5TECKdndcFhV0qsa4ZK7syDoukNFBctFaKnwZ8SwIqzfQXNxZXODSWZzyAJe4nFtUuM/F71VVCMal61dBmP7SNSpQ6NVFNtZygRay5QIaMng3D6nlCB/cUCQAVGQWIZt8XbjURcDFXYODlYNmSqmqPOdzLLv4fAW+LyzIsEVw/gklvmIh/rSFeH4lgViWzJL1f0yI61avqrxJ+3Ys3/GOd7zjHe/YGn8A7WAqe+rIo60AAAAASUVORK5CYII=';
 
 // === STORAGE ===
@@ -1650,18 +1652,18 @@ function eliminaArticolo(disc, idx) {
   toast('Articolo eliminato');
 }
 
-function setMargineCatalogo(idx, val) {
+async function setMargineCatalogo(idx, val) {
   const disc = currentDisciplinaCatalogo;
   const articoli = state.catalogo[disc].articoli;
   const art = articoli[idx];
   const nuovo = parseFloat(val);
-  if (isNaN(nuovo) || nuovo < 0) {
-    renderCatalogo();
-    return;
-  }
+  if (isNaN(nuovo) || nuovo < 0) { renderCatalogo(); return; }
   art.margine = nuovo / 100;
-  saveState();
-  // aggiorna solo la cella "Vendita Calcolato" della stessa riga
+  setSyncStatus('syncing');
+  await saveStateCloud();
+  setSyncStatus('ok');
+  toast('Margine salvato ☁');
+  // aggiorna solo la cella vendita della riga
   const tbody = document.getElementById('cat-tbody');
   const td = tbody.querySelector(`td[data-vendita-idx="${idx}"]`);
   if (td) td.textContent = fmtEur(art.prezzo_acquisto * (1 + 0.22) * (1 + art.margine));
@@ -2854,8 +2856,10 @@ window.salvaConfig = salvaConfig;
 
 // === AGGIORNAMENTO AUTOMATICO IN TEMPO REALE ===
 // Polling ogni 30 secondi: aggiorna catalogo e preventivi da Supabase
+// Non sovrascrive se abbiamo salvato localmente negli ultimi 10 secondi
 setInterval(async () => {
   if (document.hidden || !state) return;
+  if (Date.now() - lastLocalSave < 10000) return; // evita race condition
   try {
     const {data} = await sb.from('app_state').select('key,value');
     if (data) for (const row of data) {
@@ -2865,16 +2869,16 @@ setInterval(async () => {
     }
     const {data: pData} = await sb.from('preventivi').select('id,data_json').order('updated_at', {ascending:false});
     if (pData) state.preventivi = pData.map(r => r.data_json);
-    // Aggiorna la vista attiva
     if (currentView === 'preventivo') renderPreventivo();
     if (currentView === 'storico') renderStorico();
     if (currentView === 'catalogo') renderCatalogo();
   } catch(e) {}
 }, 30000);
 
-// Ricarica subito quando la finestra torna in primo piano
+// Ricarica quando la finestra torna in primo piano
+// ma solo se non abbiamo salvato di recente
 document.addEventListener('visibilitychange', async () => {
-  if (!document.hidden && state) {
+  if (!document.hidden && state && (Date.now() - lastLocalSave > 10000)) {
     await loadFromCloud();
     if (currentView === 'preventivo') renderPreventivo();
     if (currentView === 'storico') renderStorico();
