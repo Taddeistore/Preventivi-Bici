@@ -1267,7 +1267,13 @@ const CAT_FIELD = {
   'POTENZIOMETRO': 'testo',
   'RUOTE': 'ruote',
 };
-let state = loadState();
+// Stato iniziale — verrà subito sovrascritto da loadFromCloud()
+let state = {
+  catalogo: JSON.parse(JSON.stringify(CATALOGO_INIZIALE)),
+  drafts: {},
+  preventivi: [],
+  config: { negozio_nome:'', negozio_indirizzo:'', negozio_tel:'', negozio_piva:'' }
+};
 
 // === AUTH ===
 // === SYNC ===
@@ -1357,39 +1363,6 @@ function makeEmptyDraft(disc) {
     versioni: [],        // [{ts, snapshot}] max 10
   };
 }
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const s = JSON.parse(raw);
-      // migrazione: garantisce che drafts esista per tutte le discipline
-      if (!s.drafts) s.drafts = {};
-      for (const d of DISCIPLINE) {
-        if (!s.drafts[d]) {
-          // se esiste un vecchio "preventivoCorrente" della stessa disciplina lo recuperiamo
-          s.drafts[d] = null; // verrà inizializzato sotto
-        }
-      }
-      if (!s.config) s.config = { negozio_nome:'', negozio_indirizzo:'', negozio_tel:'', negozio_piva:'' };
-      // garantire margine_override su preventivi salvati esistenti
-      for (const p of (s.preventivi || [])) {
-        if (!p.margine_override) p.margine_override = {};
-      }
-      return s;
-    }
-  } catch (e) { console.error(e); }
-  return {
-    catalogo: JSON.parse(JSON.stringify(CATALOGO_INIZIALE)),
-    drafts: {},
-    preventivi: [],
-    config: {
-      negozio_nome: '',
-      negozio_indirizzo: '',
-      negozio_tel: '',
-      negozio_piva: '',
-    }
-  };
-}
 function ensureDraft(disc) {
   if (!state.drafts) state.drafts = {};
   if (!state.drafts[disc]) state.drafts[disc] = makeEmptyDraft(disc);
@@ -1401,11 +1374,7 @@ function ensureDraft(disc) {
   return state.drafts[disc];
 }
 function saveState() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    toast('Errore salvataggio: ' + e.message, true);
-  }
+  saveStateCloud();
 }
 
 // === UTILS ===
@@ -2882,6 +2851,36 @@ window.showTab = showTab;
 window.esportaDati = esportaDati;
 window.importaDati = importaDati;
 window.salvaConfig = salvaConfig;
+
+// === AGGIORNAMENTO AUTOMATICO IN TEMPO REALE ===
+// Polling ogni 30 secondi: aggiorna catalogo e preventivi da Supabase
+setInterval(async () => {
+  if (document.hidden || !state) return;
+  try {
+    const {data} = await sb.from('app_state').select('key,value');
+    if (data) for (const row of data) {
+      if (row.key === 'catalogo') state.catalogo = row.value;
+      if (row.key === 'config') state.config = row.value;
+      if (row.key === 'drafts') state.drafts = row.value || {};
+    }
+    const {data: pData} = await sb.from('preventivi').select('id,data_json').order('updated_at', {ascending:false});
+    if (pData) state.preventivi = pData.map(r => r.data_json);
+    // Aggiorna la vista attiva
+    if (currentView === 'preventivo') renderPreventivo();
+    if (currentView === 'storico') renderStorico();
+    if (currentView === 'catalogo') renderCatalogo();
+  } catch(e) {}
+}, 30000);
+
+// Ricarica subito quando la finestra torna in primo piano
+document.addEventListener('visibilitychange', async () => {
+  if (!document.hidden && state) {
+    await loadFromCloud();
+    if (currentView === 'preventivo') renderPreventivo();
+    if (currentView === 'storico') renderStorico();
+    if (currentView === 'catalogo') renderCatalogo();
+  }
+});
 
 </script>
 
