@@ -2232,6 +2232,12 @@ function renderRiepilogoMargini(prev, t) {
         <span class="rg-val huge ${t.margine_finale >= 0 ? 'green' : 'red'}">${fmtEur(t.margine_finale)}</span>
         <span class="rg-pct"><span class="pct-badge big ${t.margine_finale_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.margine_finale_pct)}</span></span>
       </div>` : ''}
+      ${(t.arrotondamento_finale > 0 || t.haSpedizione) ? `
+      <div class="rg-row big">
+        <span class="rg-label strong">Margine Reale (dopo arrotond.)</span>
+        <span class="rg-val huge ${t.margine_reale >= 0 ? 'green' : 'red'}">${fmtEur(t.margine_reale)}</span>
+        <span class="rg-pct"><span class="pct-badge big ${t.margine_reale_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.margine_reale_pct)}</span></span>
+      </div>` : ''}
     </div>
   `;
 }
