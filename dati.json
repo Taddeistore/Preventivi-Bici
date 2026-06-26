@@ -5,127 +5,127 @@
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Tarmac S-Works",
-          "prezzo_listino": 5500.0,
+          "prezzo_listino": 5500,
           "prezzo_acquisto": 3177.7,
-          "margine": 0.25
+          "margine": 0.3
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Tarmac S-Works Promo",
-          "prezzo_listino": 5500.0,
+          "prezzo_listino": 5500,
           "prezzo_acquisto": 2224.39,
           "margine": 0.25
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Aethos S-Works",
-          "prezzo_listino": 5500.0,
+          "prezzo_listino": 5500,
           "prezzo_acquisto": 3177.7,
           "margine": 0.25
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Tarmac Specialized",
-          "prezzo_listino": 4000.0,
-          "prezzo_acquisto": 1684.0,
+          "prezzo_listino": 4000,
+          "prezzo_acquisto": 1684,
           "margine": 0.25
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Allez",
-          "prezzo_listino": 1650.0,
+          "prezzo_listino": 1650,
           "prezzo_acquisto": 851.53,
           "margine": 0.25
         },
         {
           "categoria": "DURA ACE",
           "descrizione": "Gruppo Completo",
-          "prezzo_listino": 3221.0,
-          "prezzo_acquisto": 1857.0,
+          "prezzo_listino": 3221,
+          "prezzo_acquisto": 1857,
           "margine": 0.25
         },
         {
           "categoria": "DURA ACE",
           "descrizione": "Gruppo + PowerMeter",
-          "prezzo_listino": 4782.0,
-          "prezzo_acquisto": 2342.0,
+          "prezzo_listino": 4782,
+          "prezzo_acquisto": 2342,
           "margine": 0.25
         },
         {
           "categoria": "DURA ACE",
           "descrizione": "Gruppo NO Guarnitura",
-          "prezzo_listino": 3222.0,
-          "prezzo_acquisto": 1585.0,
+          "prezzo_listino": 3222,
+          "prezzo_acquisto": 1585,
           "margine": 0.25
         },
         {
           "categoria": "DURA ACE",
           "descrizione": "Solo Upgrade Kit",
-          "prezzo_listino": 2696.0,
-          "prezzo_acquisto": 1339.0,
+          "prezzo_listino": 2696,
+          "prezzo_acquisto": 1339,
           "margine": 0.25
         },
         {
           "categoria": "ULTEGRA",
           "descrizione": "Gruppo Completo",
-          "prezzo_listino": 2098.0,
-          "prezzo_acquisto": 1167.0,
+          "prezzo_listino": 2098,
+          "prezzo_acquisto": 1167,
           "margine": 0.25
         },
         {
           "categoria": "ULTEGRA",
           "descrizione": "Gruppo + PowerMeter",
-          "prezzo_listino": 3155.0,
-          "prezzo_acquisto": 1547.0,
+          "prezzo_listino": 3155,
+          "prezzo_acquisto": 1547,
           "margine": 0.25
         },
         {
           "categoria": "ULTEGRA",
           "descrizione": "Gruppo NO Guarnitura",
-          "prezzo_listino": 2098.0,
-          "prezzo_acquisto": 1027.0,
+          "prezzo_listino": 2098,
+          "prezzo_acquisto": 1027,
           "margine": 0.25
         },
         {
           "categoria": "ULTEGRA",
           "descrizione": "Solo Upgrade Kit Di2",
-          "prezzo_listino": 1824.0,
-          "prezzo_acquisto": 899.0,
+          "prezzo_listino": 1824,
+          "prezzo_acquisto": 899,
           "margine": 0.25
         },
         {
           "categoria": "105 DI2",
           "descrizione": "Gruppo Completo",
-          "prezzo_listino": 1688.0,
-          "prezzo_acquisto": 819.0,
+          "prezzo_listino": 1688,
+          "prezzo_acquisto": 819,
           "margine": 0.25
         },
         {
           "categoria": "105 DI2",
           "descrizione": "Gruppo NO Guarnitura",
-          "prezzo_listino": 1528.0,
-          "prezzo_acquisto": 738.0,
+          "prezzo_listino": 1528,
+          "prezzo_acquisto": 738,
           "margine": 0.25
         },
         {
           "categoria": "105 DI2",
           "descrizione": "Solo Upgrade Kit Di2",
-          "prezzo_listino": 1351.0,
-          "prezzo_acquisto": 660.0,
+          "prezzo_listino": 1351,
+          "prezzo_acquisto": 660,
           "margine": 0.25
         },
         {
           "categoria": "105 MEC.",
           "descrizione": "Gruppo Completo",
-          "prezzo_listino": 996.0,
-          "prezzo_acquisto": 491.0,
+          "prezzo_listino": 996,
+          "prezzo_acquisto": 491,
           "margine": 0.25
         },
         {
           "categoria": "105 MEC.",
           "descrizione": "Gruppo NO Guarnitura",
-          "prezzo_listino": 835.0,
-          "prezzo_acquisto": 410.0,
+          "prezzo_listino": 835,
+          "prezzo_acquisto": 410,
           "margine": 0.25
         },
         {
@@ -173,120 +173,120 @@
         {
           "categoria": "MANUBRIO",
           "descrizione": "Attacco Manubrio",
-          "prezzo_listino": 149.0,
+          "prezzo_listino": 149,
           "prezzo_acquisto": 69.61,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Nastro Manubrio Supacaz",
-          "prezzo_listino": 39.0,
+          "prezzo_listino": 39,
           "prezzo_acquisto": 18.22,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Short",
-          "prezzo_listino": 40.0,
+          "prezzo_listino": 40,
           "prezzo_acquisto": 18.69,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Expert",
-          "prezzo_listino": 69.0,
+          "prezzo_listino": 69,
           "prezzo_acquisto": 32.24,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio SL7",
-          "prezzo_listino": 300.0,
-          "prezzo_acquisto": 197.0,
+          "prezzo_listino": 300,
+          "prezzo_acquisto": 197,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio SL8",
-          "prezzo_listino": 580.0,
+          "prezzo_listino": 580,
           "prezzo_acquisto": 284.75,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Roval Alpinist Cockpit II",
-          "prezzo_listino": 579.0,
+          "prezzo_listino": 579,
           "prezzo_acquisto": 284.75,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Roval Rapide Cockpit",
-          "prezzo_listino": 579.0,
+          "prezzo_listino": 579,
           "prezzo_acquisto": 284.75,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella Base",
-          "prezzo_listino": 99.0,
+          "prezzo_listino": 99,
           "prezzo_acquisto": 46.26,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella S-Works Power Evo",
-          "prezzo_listino": 449.0,
+          "prezzo_listino": 449,
           "prezzo_acquisto": 209.78,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella S-Works Power",
-          "prezzo_listino": 389.0,
+          "prezzo_listino": 389,
           "prezzo_acquisto": 181.74,
           "margine": 0.25
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote C38",
-          "prezzo_listino": 1199.0,
+          "prezzo_listino": 1199,
           "prezzo_acquisto": 589.67,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote CL III",
-          "prezzo_listino": 1798.0,
+          "prezzo_listino": 1798,
           "prezzo_acquisto": 884.26,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote CLX III",
-          "prezzo_listino": 3498.0,
+          "prezzo_listino": 3498,
           "prezzo_acquisto": 1720.32,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote Sprint CLX III",
-          "prezzo_listino": 3498.0,
+          "prezzo_listino": 3498,
           "prezzo_acquisto": 1720.32,
           "margine": 0.25
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote Miche",
-          "prezzo_listino": 1000.0,
-          "prezzo_acquisto": 443.0,
+          "prezzo_listino": 1000,
+          "prezzo_acquisto": 443,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Bora Ultra 60/80",
-          "prezzo_listino": 4280.0,
-          "prezzo_acquisto": 2354.0,
+          "prezzo_listino": 4280,
+          "prezzo_acquisto": 2354,
           "margine": 0.2
         },
         {
@@ -299,77 +299,77 @@
         {
           "categoria": "RUOTE",
           "descrizione": "DT Swiss Lenticolare 1100",
-          "prezzo_listino": 2399.0,
+          "prezzo_listino": 2399,
           "prezzo_acquisto": 1287.22,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Copertoni S-Works",
-          "prezzo_listino": 75.0,
+          "prezzo_listino": 75,
           "prezzo_acquisto": 35.04,
           "margine": 0.35
         },
         {
           "categoria": "POTENZIOMETRO",
           "descrizione": "Bracci Magene Carbonio",
-          "prezzo_listino": 555.0,
-          "prezzo_acquisto": 325.0,
+          "prezzo_listino": 555,
+          "prezzo_acquisto": 325,
           "margine": 0.35
         },
         {
           "categoria": "POTENZIOMETRO",
           "descrizione": "Bracci Magene Alluminio",
-          "prezzo_listino": 299.0,
-          "prezzo_acquisto": 169.0,
+          "prezzo_listino": 299,
+          "prezzo_acquisto": 169,
           "margine": 0.35
         },
         {
           "categoria": "POTENZIOMETRO",
           "descrizione": "Magene Carbonio",
-          "prezzo_listino": 559.0,
-          "prezzo_acquisto": 355.0,
+          "prezzo_listino": 559,
+          "prezzo_acquisto": 355,
           "margine": 0.35
         },
         {
           "categoria": "POTENZIOMETRO",
           "descrizione": "Magene Alluminio",
-          "prezzo_listino": 349.0,
-          "prezzo_acquisto": 199.0,
+          "prezzo_listino": 349,
+          "prezzo_acquisto": 199,
           "margine": 0.35
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Mov. Cen. Ceramic Speed",
-          "prezzo_listino": 389.0,
+          "prezzo_listino": 389,
           "prezzo_acquisto": 210.06,
           "margine": 0.35
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Mov. Cen. Bikone",
-          "prezzo_listino": 255.0,
+          "prezzo_listino": 255,
           "prezzo_acquisto": 140.25,
           "margine": 0.35
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Gabbia Ceramic Speed",
-          "prezzo_listino": 529.0,
+          "prezzo_listino": 529,
           "prezzo_acquisto": 285.66,
           "margine": 0.35
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Gabbia Ceramic Speed Aero",
-          "prezzo_listino": 679.0,
-          "prezzo_acquisto": 366.0,
+          "prezzo_listino": 679,
+          "prezzo_acquisto": 366,
           "margine": 0.25
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Gabbia Ceramic Speed Team",
-          "prezzo_listino": 579.0,
+          "prezzo_listino": 579,
           "prezzo_acquisto": 312.66,
           "margine": 0.35
         }
@@ -381,71 +381,71 @@
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Shiv",
-          "prezzo_listino": 5999.0,
+          "prezzo_listino": 5999,
           "prezzo_acquisto": 3466.63,
           "margine": 0.25
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Tarmac SL8",
-          "prezzo_listino": 3999.0,
-          "prezzo_acquisto": 1684.0,
+          "prezzo_listino": 3999,
+          "prezzo_acquisto": 1684,
           "margine": 0.25
         },
         {
           "categoria": "DURA ACE",
           "descrizione": "Gruppo Completo",
-          "prezzo_listino": 4330.0,
-          "prezzo_acquisto": 2192.0,
+          "prezzo_listino": 4330,
+          "prezzo_acquisto": 2192,
           "margine": 0.25
         },
         {
           "categoria": "DURA ACE",
           "descrizione": "Gruppo + PowerMeter",
-          "prezzo_listino": 5450.0,
-          "prezzo_acquisto": 2726.0,
+          "prezzo_listino": 5450,
+          "prezzo_acquisto": 2726,
           "margine": 0.25
         },
         {
           "categoria": "DURA ACE",
           "descrizione": "Gruppo NO Guarnitura",
-          "prezzo_listino": 3740.0,
-          "prezzo_acquisto": 1894.0,
+          "prezzo_listino": 3740,
+          "prezzo_acquisto": 1894,
           "margine": 0.25
         },
         {
           "categoria": "ULTEGRA",
           "descrizione": "Gruppo Completo",
-          "prezzo_listino": 3064.0,
-          "prezzo_acquisto": 1554.0,
+          "prezzo_listino": 3064,
+          "prezzo_acquisto": 1554,
           "margine": 0.25
         },
         {
           "categoria": "ULTEGRA",
           "descrizione": "Gruppo + PowerMeter",
-          "prezzo_listino": 3914.0,
-          "prezzo_acquisto": 1968.0,
+          "prezzo_listino": 3914,
+          "prezzo_acquisto": 1968,
           "margine": 0.25
         },
         {
           "categoria": "ULTEGRA",
           "descrizione": "Gruppo NO Guarnitura",
-          "prezzo_listino": 2764.0,
-          "prezzo_acquisto": 1402.0,
+          "prezzo_listino": 2764,
+          "prezzo_acquisto": 1402,
           "margine": 0.25
         },
         {
           "categoria": "105 DI2",
           "descrizione": "Gruppo Completo",
-          "prezzo_listino": 2591.0,
-          "prezzo_acquisto": 1317.0,
+          "prezzo_listino": 2591,
+          "prezzo_acquisto": 1317,
           "margine": 0.25
         },
         {
           "categoria": "105 DI2",
           "descrizione": "Gruppo NO Guarnitura",
-          "prezzo_listino": 2415.0,
-          "prezzo_acquisto": 1229.0,
+          "prezzo_listino": 2415,
+          "prezzo_acquisto": 1229,
           "margine": 0.25
         },
         {
@@ -493,15 +493,15 @@
         {
           "categoria": "MANUBRIO",
           "descrizione": "Attacco Manubrio",
-          "prezzo_listino": 149.0,
+          "prezzo_listino": 149,
           "prezzo_acquisto": 69.61,
           "margine": 0.35
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "DEDA Manubrio CronoEvo",
-          "prezzo_listino": 214.0,
-          "prezzo_acquisto": 125.0,
+          "prezzo_listino": 214,
+          "prezzo_acquisto": 125,
           "margine": 0.35
         },
         {
@@ -535,78 +535,78 @@
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Roval Alpinist Cockpit II",
-          "prezzo_listino": 579.0,
+          "prezzo_listino": 579,
           "prezzo_acquisto": 284.75,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Roval Rapide Cockpit",
-          "prezzo_listino": 579.0,
+          "prezzo_listino": 579,
           "prezzo_acquisto": 284.75,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella Base",
-          "prezzo_listino": 99.0,
+          "prezzo_listino": 99,
           "prezzo_acquisto": 46.26,
           "margine": 0.35
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella Sitero ( Crono )",
-          "prezzo_listino": 129.0,
+          "prezzo_listino": 129,
           "prezzo_acquisto": 60.27,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella S-Works Power Evo",
-          "prezzo_listino": 449.0,
+          "prezzo_listino": 449,
           "prezzo_acquisto": 209.78,
           "margine": 0.35
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella S-Works Power",
-          "prezzo_listino": 389.0,
+          "prezzo_listino": 389,
           "prezzo_acquisto": 181.74,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote C38",
-          "prezzo_listino": 1199.0,
+          "prezzo_listino": 1199,
           "prezzo_acquisto": 589.67,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote CL III",
-          "prezzo_listino": 1798.0,
+          "prezzo_listino": 1798,
           "prezzo_acquisto": 884.26,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote CLX III",
-          "prezzo_listino": 3498.0,
+          "prezzo_listino": 3498,
           "prezzo_acquisto": 1720.32,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote Sprint CLX III",
-          "prezzo_listino": 3498.0,
+          "prezzo_listino": 3498,
           "prezzo_acquisto": 1720.32,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Bora Ultra 60/80",
-          "prezzo_listino": 4280.0,
-          "prezzo_acquisto": 2354.0,
+          "prezzo_listino": 4280,
+          "prezzo_acquisto": 2354,
           "margine": 0.2
         },
         {
@@ -619,77 +619,77 @@
         {
           "categoria": "RUOTE",
           "descrizione": "DT Swiss Lenticolare 1100",
-          "prezzo_listino": 2399.0,
+          "prezzo_listino": 2399,
           "prezzo_acquisto": 1287.22,
           "margine": 0.35
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Copertoni S-Works",
-          "prezzo_listino": 70.0,
+          "prezzo_listino": 70,
           "prezzo_acquisto": 35.04,
           "margine": 0.25
         },
         {
           "categoria": "POTENZIOMETRO",
           "descrizione": "Bracci Magene Carbonio",
-          "prezzo_listino": 555.0,
-          "prezzo_acquisto": 325.0,
+          "prezzo_listino": 555,
+          "prezzo_acquisto": 325,
           "margine": 0.35
         },
         {
           "categoria": "POTENZIOMETRO",
           "descrizione": "Bracci Magene Alluminio",
-          "prezzo_listino": 299.0,
-          "prezzo_acquisto": 169.0,
+          "prezzo_listino": 299,
+          "prezzo_acquisto": 169,
           "margine": 0.35
         },
         {
           "categoria": "POTENZIOMETRO",
           "descrizione": "Magene Carbonio",
-          "prezzo_listino": 559.0,
-          "prezzo_acquisto": 355.0,
+          "prezzo_listino": 559,
+          "prezzo_acquisto": 355,
           "margine": 0.35
         },
         {
           "categoria": "POTENZIOMETRO",
           "descrizione": "Magene Alluminio",
-          "prezzo_listino": 349.0,
-          "prezzo_acquisto": 199.0,
+          "prezzo_listino": 349,
+          "prezzo_acquisto": 199,
           "margine": 0.35
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Mov. Cen. Ceramic Speed",
-          "prezzo_listino": 389.0,
+          "prezzo_listino": 389,
           "prezzo_acquisto": 210.06,
           "margine": 0.35
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Mov. Cen. Bikone",
-          "prezzo_listino": 255.0,
+          "prezzo_listino": 255,
           "prezzo_acquisto": 140.25,
           "margine": 0.25
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Gabbia Ceramic Speed",
-          "prezzo_listino": 529.0,
+          "prezzo_listino": 529,
           "prezzo_acquisto": 285.66,
           "margine": 0.35
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Gabbia Ceramic Speed Aero",
-          "prezzo_listino": 679.0,
-          "prezzo_acquisto": 366.0,
+          "prezzo_listino": 679,
+          "prezzo_acquisto": 366,
           "margine": 0.25
         },
         {
           "categoria": "ACCESSORI",
           "descrizione": "Gabbia Ceramic Speed Team",
-          "prezzo_listino": 579.0,
+          "prezzo_listino": 579,
           "prezzo_acquisto": 312.66,
           "margine": 0.35
         }
@@ -701,120 +701,120 @@
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Epic 8 S – Works",
-          "prezzo_listino": 5499.0,
+          "prezzo_listino": 5499,
           "prezzo_acquisto": 3177.7,
           "margine": 0.25
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Epic 8 PRO EVO",
-          "prezzo_listino": 3199.0,
+          "prezzo_listino": 3199,
           "prezzo_acquisto": 1796.16,
           "margine": 0.25
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Chisel",
-          "prezzo_listino": 1699.0,
+          "prezzo_listino": 1699,
           "prezzo_acquisto": 877.35,
           "margine": 0.25
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Chisel Promo",
-          "prezzo_listino": 1699.0,
+          "prezzo_listino": 1699,
           "prezzo_acquisto": 679.95,
           "margine": 0.25
         },
         {
           "categoria": "XTR",
           "descrizione": "Gruppo Completo 9220",
-          "prezzo_listino": 2531.0,
-          "prezzo_acquisto": 1232.0,
+          "prezzo_listino": 2531,
+          "prezzo_acquisto": 1232,
           "margine": 0.25
         },
         {
           "categoria": "XTR",
           "descrizione": "Gruppo Completo 9200",
-          "prezzo_listino": 2590.0,
-          "prezzo_acquisto": 1265.0,
+          "prezzo_listino": 2590,
+          "prezzo_acquisto": 1265,
           "margine": 0.25
         },
         {
           "categoria": "XTR",
           "descrizione": "Up. Kit DI2",
-          "prezzo_listino": 899.0,
-          "prezzo_acquisto": 454.0,
+          "prezzo_listino": 899,
+          "prezzo_acquisto": 454,
           "margine": 0.25
         },
         {
           "categoria": "XTR",
           "descrizione": "Up. Brake Kit 9200",
-          "prezzo_listino": 529.0,
-          "prezzo_acquisto": 267.0,
+          "prezzo_listino": 529,
+          "prezzo_acquisto": 267,
           "margine": 0.25
         },
         {
           "categoria": "XTR",
           "descrizione": "Up. Brake Kit 9220",
-          "prezzo_listino": 599.0,
-          "prezzo_acquisto": 302.0,
+          "prezzo_listino": 599,
+          "prezzo_acquisto": 302,
           "margine": 0.25
         },
         {
           "categoria": "XT",
           "descrizione": "Gruppo Completo 8200",
-          "prezzo_listino": 1704.0,
-          "prezzo_acquisto": 830.0,
+          "prezzo_listino": 1704,
+          "prezzo_acquisto": 830,
           "margine": 0.25
         },
         {
           "categoria": "XT",
           "descrizione": "Gruppo Completo 8220",
-          "prezzo_listino": 1754.0,
-          "prezzo_acquisto": 855.0,
+          "prezzo_listino": 1754,
+          "prezzo_acquisto": 855,
           "margine": 0.25
         },
         {
           "categoria": "XT",
           "descrizione": "Up. Kit DI2",
-          "prezzo_listino": 713.0,
-          "prezzo_acquisto": 359.0,
+          "prezzo_listino": 713,
+          "prezzo_acquisto": 359,
           "margine": 0.25
         },
         {
           "categoria": "XT",
           "descrizione": "Up. Brake Kit 8200",
-          "prezzo_listino": 389.0,
-          "prezzo_acquisto": 196.0,
+          "prezzo_listino": 389,
+          "prezzo_acquisto": 196,
           "margine": 0.25
         },
         {
           "categoria": "XT",
           "descrizione": "Up. Brake Kit 8220",
-          "prezzo_listino": 429.0,
-          "prezzo_acquisto": 218.0,
+          "prezzo_listino": 429,
+          "prezzo_acquisto": 218,
           "margine": 0.25
         },
         {
           "categoria": "DEORE",
           "descrizione": "Gruppo Completo 2P",
-          "prezzo_listino": 1103.0,
-          "prezzo_acquisto": 519.0,
+          "prezzo_listino": 1103,
+          "prezzo_acquisto": 519,
           "margine": 0.25
         },
         {
           "categoria": "DEORE",
           "descrizione": "Gruppo Completo 4P",
-          "prezzo_listino": 824.0,
-          "prezzo_acquisto": 542.0,
+          "prezzo_listino": 824,
+          "prezzo_acquisto": 542,
           "margine": 0.25
         },
         {
           "categoria": "DEORE",
           "descrizione": "Up. Kit DI2",
-          "prezzo_listino": 545.0,
-          "prezzo_acquisto": 275.0,
+          "prezzo_listino": 545,
+          "prezzo_acquisto": 275,
           "margine": 0.25
         },
         {
@@ -869,91 +869,91 @@
         {
           "categoria": "S200",
           "descrizione": "Gruppo Completo",
-          "prezzo_listino": 585.0,
+          "prezzo_listino": 585,
           "prezzo_acquisto": 262.44,
           "margine": 0.35
         },
         {
           "categoria": "S500 AXS",
           "descrizione": "Gruppo Completo",
-          "prezzo_listino": 1530.0,
+          "prezzo_listino": 1530,
           "prezzo_acquisto": 1183.81,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Att. Man. Roval Control SL",
-          "prezzo_listino": 149.0,
+          "prezzo_listino": 149,
           "prezzo_acquisto": 73.28,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Alloy Mini Rise",
-          "prezzo_listino": 60.0,
+          "prezzo_listino": 60,
           "prezzo_acquisto": 28.03,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Traverse SL 35",
-          "prezzo_listino": 199.0,
+          "prezzo_listino": 199,
           "prezzo_acquisto": 97.87,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Roval Control SL 35",
-          "prezzo_listino": 149.0,
+          "prezzo_listino": 149,
           "prezzo_acquisto": 73.28,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Roval Control SL Int.",
-          "prezzo_listino": 419.0,
+          "prezzo_listino": 419,
           "prezzo_acquisto": 206.06,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella Base",
-          "prezzo_listino": 99.0,
+          "prezzo_listino": 99,
           "prezzo_acquisto": 46.26,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella S-Works Power Evo",
-          "prezzo_listino": 449.0,
+          "prezzo_listino": 449,
           "prezzo_acquisto": 209.78,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella S-Works Power",
-          "prezzo_listino": 389.0,
+          "prezzo_listino": 389,
           "prezzo_acquisto": 181.74,
           "margine": 0.25
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Roval Control World Cup",
-          "prezzo_listino": 2950.0,
+          "prezzo_listino": 2950,
           "prezzo_acquisto": 1454.82,
           "margine": 0.25
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Roval Control SL VI Solix",
-          "prezzo_listino": 2550.0,
+          "prezzo_listino": 2550,
           "prezzo_acquisto": 1254.1,
           "margine": 0.25
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Roval Control SL V 370",
-          "prezzo_listino": 1148.0,
+          "prezzo_listino": 1148,
           "prezzo_acquisto": 564.59,
           "margine": 0.25
         },
@@ -979,120 +979,120 @@
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio S-Works Crux 5 FACT 12r 2027",
-          "prezzo_listino": 5799.0,
+          "prezzo_listino": 5799,
           "prezzo_acquisto": 3351.06,
           "margine": 0.25
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio S-Works Crux FACT 12r 2026",
-          "prezzo_listino": 4749.0,
+          "prezzo_listino": 4749,
           "prezzo_acquisto": 1921.01,
           "margine": 0.25
         },
         {
           "categoria": "TELAIO / BICI",
           "descrizione": "Telaio Crux FACT 10r 2026",
-          "prezzo_listino": 3149.0,
+          "prezzo_listino": 3149,
           "prezzo_acquisto": 1414.47,
           "margine": 0.25
         },
         {
           "categoria": "GRX400",
           "descrizione": "Gruppo Completo 2x10",
-          "prezzo_listino": 830.0,
-          "prezzo_acquisto": 422.0,
+          "prezzo_listino": 830,
+          "prezzo_acquisto": 422,
           "margine": 0.25
         },
         {
           "categoria": "GRX600",
           "descrizione": "Gruppo Completo 1x11",
-          "prezzo_listino": 939.0,
-          "prezzo_acquisto": 461.0,
+          "prezzo_listino": 939,
+          "prezzo_acquisto": 461,
           "margine": 0.25
         },
         {
           "categoria": "GRX600",
           "descrizione": "Gruppo Completo 2x11",
-          "prezzo_listino": 1000.0,
-          "prezzo_acquisto": 492.0,
+          "prezzo_listino": 1000,
+          "prezzo_acquisto": 492,
           "margine": 0.25
         },
         {
           "categoria": "GRX610",
           "descrizione": "Gruppo Completo 1x12",
-          "prezzo_listino": 1112.0,
-          "prezzo_acquisto": 555.0,
+          "prezzo_listino": 1112,
+          "prezzo_acquisto": 555,
           "margine": 0.25
         },
         {
           "categoria": "GRX610",
           "descrizione": "Gruppo Completo 2x12",
-          "prezzo_listino": 1191.0,
-          "prezzo_acquisto": 596.0,
+          "prezzo_listino": 1191,
+          "prezzo_acquisto": 596,
           "margine": 0.25
         },
         {
           "categoria": "GRX717 DI2",
           "descrizione": "Gruppo Completo 1x12",
-          "prezzo_listino": 1284.0,
-          "prezzo_acquisto": 628.0,
+          "prezzo_listino": 1284,
+          "prezzo_acquisto": 628,
           "margine": 0.25
         },
         {
           "categoria": "GRX810",
           "descrizione": "Gruppo Completo 1x11",
-          "prezzo_listino": 1234.0,
-          "prezzo_acquisto": 614.0,
+          "prezzo_listino": 1234,
+          "prezzo_acquisto": 614,
           "margine": 0.25
         },
         {
           "categoria": "GRX810",
           "descrizione": "Gruppo Completo 2x11",
-          "prezzo_listino": 1323.0,
-          "prezzo_acquisto": 658.0,
+          "prezzo_listino": 1323,
+          "prezzo_acquisto": 658,
           "margine": 0.25
         },
         {
           "categoria": "GRX815 DI2",
           "descrizione": "Gruppo Completo 1x11",
-          "prezzo_listino": 1748.0,
-          "prezzo_acquisto": 823.0,
+          "prezzo_listino": 1748,
+          "prezzo_acquisto": 823,
           "margine": 0.25
         },
         {
           "categoria": "GRX815 DI2",
           "descrizione": "Gruppo Completo 2x12",
-          "prezzo_listino": 2003.0,
-          "prezzo_acquisto": 952.0,
+          "prezzo_listino": 2003,
+          "prezzo_acquisto": 952,
           "margine": 0.25
         },
         {
           "categoria": "GRX820",
           "descrizione": "Gruppo Completo 1x12",
-          "prezzo_listino": 1311.0,
-          "prezzo_acquisto": 651.0,
+          "prezzo_listino": 1311,
+          "prezzo_acquisto": 651,
           "margine": 0.25
         },
         {
           "categoria": "GRX820",
           "descrizione": "Gruppo Completo 2x12",
-          "prezzo_listino": 1379.0,
-          "prezzo_acquisto": 686.0,
+          "prezzo_listino": 1379,
+          "prezzo_acquisto": 686,
           "margine": 0.25
         },
         {
           "categoria": "GRX825 DI2",
           "descrizione": "Gruppo Completo 2x12",
-          "prezzo_listino": 2185.0,
-          "prezzo_acquisto": 1072.0,
+          "prezzo_listino": 2185,
+          "prezzo_acquisto": 1072,
           "margine": 0.25
         },
         {
           "categoria": "GRX827 DI2",
           "descrizione": "Gruppo Completo 1x12",
-          "prezzo_listino": 1865.0,
-          "prezzo_acquisto": 920.0,
+          "prezzo_listino": 1865,
+          "prezzo_acquisto": 920,
           "margine": 0.25
         },
         {
@@ -1140,70 +1140,70 @@
         {
           "categoria": "MANUBRIO",
           "descrizione": "Attacco Manubrio",
-          "prezzo_listino": 149.0,
+          "prezzo_listino": 149,
           "prezzo_acquisto": 69.61,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Roval Terra",
-          "prezzo_listino": 319.0,
+          "prezzo_listino": 319,
           "prezzo_acquisto": 156.89,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio SL8",
-          "prezzo_listino": 580.0,
+          "prezzo_listino": 580,
           "prezzo_acquisto": 284.75,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Roval Alpinist Cockpit II",
-          "prezzo_listino": 579.0,
+          "prezzo_listino": 579,
           "prezzo_acquisto": 284.75,
           "margine": 0.25
         },
         {
           "categoria": "MANUBRIO",
           "descrizione": "Manubrio Roval Rapide Cockpit",
-          "prezzo_listino": 579.0,
+          "prezzo_listino": 579,
           "prezzo_acquisto": 284.75,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella Base",
-          "prezzo_listino": 99.0,
+          "prezzo_listino": 99,
           "prezzo_acquisto": 46.26,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella S-Works Power Evo",
-          "prezzo_listino": 449.0,
+          "prezzo_listino": 449,
           "prezzo_acquisto": 209.78,
           "margine": 0.25
         },
         {
           "categoria": "SELLA",
           "descrizione": "Sella S-Works Power",
-          "prezzo_listino": 389.0,
+          "prezzo_listino": 389,
           "prezzo_acquisto": 181.74,
           "margine": 0.25
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote Roval Terra CL",
-          "prezzo_listino": 2598.0,
+          "prezzo_listino": 2598,
           "prezzo_acquisto": 1277.7,
           "margine": 0.25
         },
         {
           "categoria": "RUOTE",
           "descrizione": "Ruote Terra CLX II",
-          "prezzo_listino": 1798.0,
+          "prezzo_listino": 1798,
           "prezzo_acquisto": 884.26,
           "margine": 0.25
         },
@@ -1219,7 +1219,83 @@
     }
   },
   "preventivi": [],
-  "drafts": {},
+  "drafts": {
+    "Strada": {
+      "id": null,
+      "data": "2026-06-26",
+      "cliente": "",
+      "note": "",
+      "disciplina": "Strada",
+      "quantita": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "margine_override": {},
+      "lavoro_officina": 100,
+      "operatore": "",
+      "usato_cliente_scontato": 0,
+      "usato_cliente_listino": 0,
+      "rivendita_usato_scontato": 0,
+      "rivendita_usato_listino": 0,
+      "usato_descrizione": "",
+      "spese_spedizione": 0,
+      "arrotondamento_finale": 0,
+      "extra_voci": [],
+      "note_righe": {},
+      "versioni": []
+    }
+  },
   "config": {
     "negozio_nome": "",
     "negozio_indirizzo": "",
