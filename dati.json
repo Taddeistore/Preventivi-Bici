@@ -721,17 +721,17 @@
         },
         {
           "categoria": "TELAIO / BICI",
-          "descrizione": "Telaio Chisel Promo",
-          "prezzo_listino": 1699,
-          "prezzo_acquisto": 679.95,
-          "margine": 0.25
-        },
-        {
-          "categoria": "TELAIO / BICI",
           "descrizione": "Telaio S-Works Epic 9",
           "prezzo_listino": 6999,
           "prezzo_acquisto": 4044.51,
           "margine": 0.3
+        },
+        {
+          "categoria": "TELAIO / BICI",
+          "descrizione": "Telaio Chisel Promo",
+          "prezzo_listino": 1699,
+          "prezzo_acquisto": 679.95,
+          "margine": 0.25
         },
         {
           "categoria": "XTR",
