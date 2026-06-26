@@ -2679,6 +2679,18 @@ function buildStampa(p) {
         <span class="num">${fmtEur(t.prezzo_finale_cliente)}</span>
         <span class="num">${fmtEur(totPagaLi)}</span>
       </div>
+
+      ${(p.rivendita_usato_scontato || 0) > 0 ? `
+      <div class="row dual">
+        <span>+ Rivendita Usato</span>
+        <span class="num">${fmtEur(p.rivendita_usato_scontato || 0)}</span>
+        <span class="num muted">—</span>
+      </div>
+      <div class="row dual strong">
+        <span>Totale Finale Incassato</span>
+        <span class="num">${fmtEur((t.prezzo_finale_cliente - t.spese_spedizione) + (p.rivendita_usato_scontato || 0))}</span>
+        <span class="num muted">—</span>
+      </div>` : ''}
     </div>
 
     <div id="stampa-riepilogo" class="stampa-riepilogo">
@@ -2704,17 +2716,6 @@ function buildStampa(p) {
         <span class="rip-label strong">Margine su Incasso Immediato</span>
         <span class="rip-val huge ${t.incasso_immediato >= 0 ? 'green' : 'red'}">${fmtEur(t.incasso_immediato)}</span>
         <span class="rip-pct big ${t.incasso_immediato_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.incasso_immediato_pct)}</span>
-      </div>` : ''}
-      ${(p.rivendita_usato_scontato || 0) > 0 ? `
-      <div class="rip-row">
-        <span class="rip-label">+ Rivendita Usato</span>
-        <span class="rip-val">${fmtEur(p.rivendita_usato_scontato || 0)}</span>
-        <span class="rip-pct"></span>
-      </div>
-      <div class="rip-row big">
-        <span class="rip-label strong">Totale Finale Incassato</span>
-        <span class="rip-val huge">${fmtEur((t.prezzo_finale_cliente - t.spese_spedizione) + (p.rivendita_usato_scontato || 0))}</span>
-        <span class="rip-pct"></span>
       </div>` : ''}
     </div>
     `)}
