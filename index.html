@@ -1663,7 +1663,7 @@ function eliminaArticolo(disc, idx) {
   toast('Articolo eliminato');
 }
 
-async async function setMargineCatalogo(idx, val) {
+async function setMargineCatalogo(idx, val) {
   const disc = currentDisciplinaCatalogo;
   const articoli = state.catalogo[disc].articoli;
   const art = articoli[idx];
