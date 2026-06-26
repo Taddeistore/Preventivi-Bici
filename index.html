@@ -2688,6 +2688,12 @@ function buildStampa(p) {
         <span class="rip-val huge">${fmtEur(t.margine_finale)}</span>
         <span class="rip-pct big ${t.margine_finale_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.margine_finale_pct)}</span>
       </div>` : ''}
+      ${t.haUsatoCliente ? `
+      <div class="rip-row big">
+        <span class="rip-label strong">Margine su Incasso Immediato</span>
+        <span class="rip-val huge ${t.incasso_immediato >= 0 ? 'green' : 'red'}">${fmtEur(t.incasso_immediato)}</span>
+        <span class="rip-pct big ${t.incasso_immediato_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.incasso_immediato_pct)}</span>
+      </div>` : ''}
       ${(t.arrotondamento_finale > 0 || t.haSpedizione || (p.rivendita_usato_scontato || 0) > 0) ? `
       <div class="rip-row big">
         <span class="rip-label strong">Margine Reale (prezzo finale incassato)</span>
