@@ -1503,6 +1503,12 @@ function calcTotali(prev) {
   const margine_reale = incassato_reale - costo_pezzi_iva;
   const margine_reale_pct = costo_pezzi_iva > 0 ? (margine_reale / costo_pezzi_iva) : 0;
 
+  // === Incasso immediato (prima di rivendere l'usato) ===
+  // Quanto entra realmente in cassa subito = prezzo finale cliente − costo pezzi
+  // (l'usato preso dal cliente NON è ancora denaro, lo diventa solo quando lo rivendi)
+  const incasso_immediato = incasso_bici_netto - costo_pezzi_iva;
+  const incasso_immediato_pct = costo_pezzi_iva > 0 ? (incasso_immediato / costo_pezzi_iva) : 0;
+
   return {
     tot_articoli_scontato, tot_articoli_listino,
     tot_articoli_scontato_lordo, tot_extra, extra,
@@ -1518,6 +1524,7 @@ function calcTotali(prev) {
     base_cliente, arrotondamento_finale,
     prezzo_finale_cliente, sconto_arrotondamento,
     incassato_reale, margine_reale, margine_reale_pct,
+    incasso_immediato, incasso_immediato_pct,
   };
 }
 
@@ -2231,6 +2238,12 @@ function renderRiepilogoMargini(prev, t) {
         <span class="rg-label strong">Margine Finale (con Usato)</span>
         <span class="rg-val huge ${t.margine_finale >= 0 ? 'green' : 'red'}">${fmtEur(t.margine_finale)}</span>
         <span class="rg-pct"><span class="pct-badge big ${t.margine_finale_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.margine_finale_pct)}</span></span>
+      </div>` : ''}
+      ${t.haUsatoCliente ? `
+      <div class="rg-row">
+        <span class="rg-label">Incasso Immediato (in cassa, usato escluso)</span>
+        <span class="rg-val ${t.incasso_immediato >= 0 ? 'green' : 'red'}">${fmtEur(t.incasso_immediato)}</span>
+        <span class="rg-pct"><span class="pct-badge ${t.incasso_immediato_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.incasso_immediato_pct)}</span></span>
       </div>` : ''}
       ${(t.arrotondamento_finale > 0 || t.haSpedizione) ? `
       <div class="rg-row big">
