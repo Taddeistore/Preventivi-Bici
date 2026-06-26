@@ -1288,6 +1288,11 @@ function setSyncStatus(s) {
 
 async function loadFromCloud() {
   setSyncStatus('syncing');
+  // Carica le bozze locali di questo PC dal localStorage
+  try {
+    const localDrafts = localStorage.getItem('preventivi_drafts');
+    if (localDrafts) state.drafts = JSON.parse(localDrafts);
+  } catch(e) {}
   try {
     const {data: appData} = await sb.from('app_state').select('*');
     if (appData) {
@@ -1297,7 +1302,7 @@ async function loadFromCloud() {
           state.catalogo = row.value;
         }
         if (row.key==='config') state.config = row.value;
-        if (row.key==='drafts') state.drafts = row.value || {};
+        // I drafts NON vengono caricati da Supabase — restano locali a questo PC
       }
     }
     const {data: prevData} = await sb.from('preventivi').select('*').order('updated_at', {ascending: false});
@@ -1312,11 +1317,12 @@ async function loadFromCloud() {
 async function saveStateCloud() {
   lastLocalSave = Date.now();
   setSyncStatus('syncing');
+  // I drafts (bozze in lavorazione) restano LOCALI a questo PC
+  try { localStorage.setItem('preventivi_drafts', JSON.stringify(state.drafts)); } catch(e) {}
   try {
     await sb.from('app_state').upsert([
       {key:'catalogo', value:state.catalogo, updated_at:new Date().toISOString()},
       {key:'config', value:state.config, updated_at:new Date().toISOString()},
-      {key:'drafts', value:state.drafts, updated_at:new Date().toISOString()},
     ]);
     setSyncStatus('ok');
   } catch(e) {
@@ -2699,6 +2705,17 @@ function buildStampa(p) {
         <span class="rip-val huge ${t.incasso_immediato >= 0 ? 'green' : 'red'}">${fmtEur(t.incasso_immediato)}</span>
         <span class="rip-pct big ${t.incasso_immediato_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.incasso_immediato_pct)}</span>
       </div>` : ''}
+      ${(p.rivendita_usato_scontato || 0) > 0 ? `
+      <div class="rip-row">
+        <span class="rip-label">+ Rivendita Usato</span>
+        <span class="rip-val">${fmtEur(p.rivendita_usato_scontato || 0)}</span>
+        <span class="rip-pct"></span>
+      </div>
+      <div class="rip-row big">
+        <span class="rip-label strong">Totale Finale Incassato</span>
+        <span class="rip-val huge">${fmtEur((t.prezzo_finale_cliente - t.spese_spedizione) + (p.rivendita_usato_scontato || 0))}</span>
+        <span class="rip-pct"></span>
+      </div>` : ''}
     </div>
     `)}
 
@@ -2909,11 +2926,11 @@ setInterval(async () => {
     if (data) for (const row of data) {
       if (row.key === 'catalogo' && row.value && Object.keys(row.value).length > 0) state.catalogo = row.value;
       if (row.key === 'config') state.config = row.value;
-      if (row.key === 'drafts') state.drafts = row.value || {};
+      // i drafts NON si sincronizzano — la bozza resta locale
     }
     const {data: pData} = await sb.from('preventivi').select('id,data_json').order('updated_at', {ascending:false});
     if (pData) state.preventivi = pData.map(r => r.data_json);
-    if (currentView === 'preventivo') renderPreventivo();
+    // NON ri-renderizza il preventivo per non disturbare la bozza in lavorazione
     if (currentView === 'storico') renderStorico();
     if (currentView === 'catalogo') renderCatalogo();
   } catch(e) {}
