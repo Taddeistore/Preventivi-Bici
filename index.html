@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- v1782477846 -->
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -2246,11 +2245,16 @@ function renderRiepilogoMargini(prev, t) {
         <span class="rg-val huge ${t.incasso_immediato >= 0 ? 'green' : 'red'}">${fmtEur(t.incasso_immediato)}</span>
         <span class="rg-pct"><span class="pct-badge big ${t.incasso_immediato_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.incasso_immediato_pct)}</span></span>
       </div>` : ''}
-      ${(t.arrotondamento_finale > 0 || t.haSpedizione) ? `
+      ${(prev.rivendita_usato_scontato || 0) > 0 ? `
+      <div class="rg-row">
+        <span class="rg-label">+ Rivendita Usato</span>
+        <span class="rg-val green">${fmtEur(prev.rivendita_usato_scontato || 0)}</span>
+        <span class="rg-pct"></span>
+      </div>
       <div class="rg-row big">
-        <span class="rg-label strong">Margine Reale (dopo arrotond.)</span>
-        <span class="rg-val huge ${t.margine_reale >= 0 ? 'green' : 'red'}">${fmtEur(t.margine_reale)}</span>
-        <span class="rg-pct"><span class="pct-badge big ${t.margine_reale_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.margine_reale_pct)}</span></span>
+        <span class="rg-label strong">Totale Finale Incassato</span>
+        <span class="rg-val huge">${fmtEur((t.prezzo_finale_cliente - t.spese_spedizione) + (prev.rivendita_usato_scontato || 0))}</span>
+        <span class="rg-pct"></span>
       </div>` : ''}
     </div>
   `;
@@ -2694,12 +2698,6 @@ function buildStampa(p) {
         <span class="rip-label strong">Margine su Incasso Immediato</span>
         <span class="rip-val huge ${t.incasso_immediato >= 0 ? 'green' : 'red'}">${fmtEur(t.incasso_immediato)}</span>
         <span class="rip-pct big ${t.incasso_immediato_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.incasso_immediato_pct)}</span>
-      </div>` : ''}
-      ${(t.arrotondamento_finale > 0 || t.haSpedizione || (p.rivendita_usato_scontato || 0) > 0) ? `
-      <div class="rip-row big">
-        <span class="rip-label strong">Margine Reale (prezzo finale incassato)</span>
-        <span class="rip-val huge ${t.margine_reale >= 0 ? 'green' : 'red'}">${fmtEur(t.margine_reale)}</span>
-        <span class="rip-pct big ${t.margine_reale_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.margine_reale_pct)}</span>
       </div>` : ''}
     </div>
     `)}
