@@ -2240,10 +2240,10 @@ function renderRiepilogoMargini(prev, t) {
         <span class="rg-pct"><span class="pct-badge big ${t.margine_finale_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.margine_finale_pct)}</span></span>
       </div>` : ''}
       ${t.haUsatoCliente ? `
-      <div class="rg-row">
-        <span class="rg-label">Incasso Immediato (in cassa, usato escluso)</span>
-        <span class="rg-val ${t.incasso_immediato >= 0 ? 'green' : 'red'}">${fmtEur(t.incasso_immediato)}</span>
-        <span class="rg-pct"><span class="pct-badge ${t.incasso_immediato_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.incasso_immediato_pct)}</span></span>
+      <div class="rg-row big">
+        <span class="rg-label strong">Margine su Incasso Immediato</span>
+        <span class="rg-val huge ${t.incasso_immediato >= 0 ? 'green' : 'red'}">${fmtEur(t.incasso_immediato)}</span>
+        <span class="rg-pct"><span class="pct-badge big ${t.incasso_immediato_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.incasso_immediato_pct)}</span></span>
       </div>` : ''}
       ${(t.arrotondamento_finale > 0 || t.haSpedizione) ? `
       <div class="rg-row big">
