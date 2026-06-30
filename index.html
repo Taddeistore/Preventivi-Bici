@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v1782839112 -->
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -1009,6 +1010,32 @@ select.note-riga-input option { background: var(--bg-3); color: var(--txt); }
   font-display: swap;
   src: local('Bebas Neue');
 }
+/* === WIZARD === */
+.wiz-steps { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+.wiz-step-badge { display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:600; background:var(--bg-2); border:1px solid var(--line); color:var(--txt-dim); }
+.wiz-step-badge.done { background:#1a2e1a; border-color:#2e5e2e; color:#7ed87e; cursor:pointer; }
+.wiz-step-badge.current { background:var(--red); border-color:var(--red-bright); color:#fff; }
+.wiz-panel { background:var(--bg-2); border:1px solid var(--line); border-radius:14px; padding:28px; }
+.wiz-question { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:1px; margin-bottom:6px; }
+.wiz-sub { color:var(--txt-dim); font-size:14px; margin-bottom:24px; }
+.wiz-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+.wiz-card { background:var(--bg-3); border:1px solid var(--line-2); border-radius:12px; padding:18px; cursor:pointer; transition:all .15s; text-align:left; position:relative; }
+.wiz-card:hover { border-color:var(--red); background:#1f1416; transform:translateY(-2px); }
+.wiz-card .wc-title { font-size:16px; font-weight:700; margin-bottom:6px; }
+.wiz-card .wc-price { color:var(--red-bright); font-size:18px; font-weight:700; }
+.wiz-card .wc-listino { color:var(--txt-mute); font-size:12px; text-decoration:line-through; }
+.wiz-card .wc-cat { font-size:11px; color:var(--txt-mute); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+.wiz-card.brand { text-align:center; padding:28px 18px; }
+.wiz-card.brand .wc-title { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:1px; }
+.wiz-actions { display:flex; gap:10px; margin-top:24px; flex-wrap:wrap; }
+.wiz-skip { background:transparent; color:var(--txt-dim); border:1px dashed var(--line-2); }
+.wiz-summary { background:var(--bg-3); border-radius:10px; padding:16px; margin-bottom:20px; }
+.wiz-summary-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px; align-items:center; }
+.wiz-summary-row:last-child { border-bottom:none; }
+.wiz-summary-row .ws-cat { color:var(--txt-dim); min-width:110px; }
+.wiz-summary-row .ws-prod { font-weight:600; flex:1; padding:0 12px; }
+.wiz-summary-row .ws-price { color:var(--red-bright); font-weight:700; }
+.wiz-total { display:flex; justify-content:space-between; font-family:'Bebas Neue',sans-serif; font-size:28px; padding-top:14px; margin-top:6px; border-top:2px solid var(--red); }
 </style>
 </head>
 <body>
@@ -1025,6 +1052,7 @@ select.note-riga-input option { background: var(--bg-3); color: var(--txt); }
     <button data-view="storico">Storico</button>
     <button data-view="catalogo">Catalogo</button>
     <button data-view="backup">Backup</button>
+    <button data-view="wizard" style="color:#f5c518">⚡ Wizard</button>
   </nav>
 </header>
 
@@ -1180,6 +1208,12 @@ select.note-riga-input option { background: var(--bg-3); color: var(--txt); }
     </div>
 
   </div>
+</section>
+
+<!-- ============ WIZARD (PROVA) ============ -->
+<section id="view-wizard" class="view">
+  <h2 class="section-title">⚡ Wizard <span>Configuratore</span> <span style="font-size:12px;color:var(--txt-mute);font-weight:400">(in prova)</span></h2>
+  <div id="wizard-container"></div>
 </section>
 
 <!-- ============ STAMPA ============ -->
@@ -1546,6 +1580,7 @@ function setView(v) {
   if (v === 'preventivo') renderPreventivo();
   if (v === 'storico') renderStorico();
   if (v === 'backup') renderBackup();
+  if (v === 'wizard') renderWizard();
 }
 
 // === CATALOGO ===
@@ -2875,6 +2910,233 @@ async function spostaArticolo(disc, idx, dir) {
   setSyncStatus('ok');
   renderCatalogo();
 }
+// ═══════════════════════════════════════════
+// WIZARD CONFIGURATORE (pagina di prova)
+// ═══════════════════════════════════════════
+
+// Raggruppamento categorie per marca, per disciplina
+const WIZARD_MARCHE = {
+  Strada: {
+    'Gruppo': { Shimano: ['DURA ACE','ULTEGRA','105 DI2','105 MEC.'], SRAM: ['RED','FORCE','RIVAL'] }
+  },
+  Crono: {
+    'Gruppo': { Shimano: ['DURA ACE','ULTEGRA','105 DI2'], SRAM: ['RED','FORCE','RIVAL'] }
+  },
+  MTB: {
+    'Gruppo': { Shimano: ['XTR','XT','DEORE'], SRAM: ['XX','XX SL','XO','GX','S100','S200','S500 AXS'] }
+  },
+  Gravel: {
+    'Gruppo': { Shimano: ['GRX400','GRX600','GRX610','GRX717 DI2','GRX810','GRX815 DI2','GRX820','GRX825 DI2','GRX827 DI2'], SRAM: ['RED XPLR','FORCE XPLR','RIVAL XPLR'] }
+  }
+};
+
+// Ordine degli step del wizard (categorie singole)
+const WIZARD_STEPS_CATEGORIE = ['TELAIO / BICI', 'Gruppo', 'RUOTE', 'MANUBRIO', 'SELLA', 'POTENZIOMETRO', 'ACCESSORI'];
+
+let wizardState = {
+  disciplina: null,
+  stepIndex: 0,        // 0 = scelta disciplina, poi avanza sulle categorie
+  marcaScelta: null,   // marca temporanea quando serve doppia selezione
+  selezioni: []        // [{categoria, descrizione, prezzo_listino, prezzo_acquisto, margine}]
+};
+
+function renderWizard() {
+  const c = document.getElementById('wizard-container');
+  // Step 0: scelta disciplina
+  if (!wizardState.disciplina) {
+    c.innerHTML = `
+      <div class="wiz-panel">
+        <div class="wiz-question">Che tipo di bici?</div>
+        <div class="wiz-sub">Scegli la disciplina per iniziare la configurazione</div>
+        <div class="wiz-grid">
+          ${DISCIPLINE.map(d => `
+            <button class="wiz-card brand" onclick="wizScegliDisciplina('${d}')">
+              <div class="wc-title">${d}</div>
+            </button>`).join('')}
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Costruisci le tappe (categorie effettivamente presenti nella disciplina)
+  const cats = catWizardCategorie();
+  const stepCat = cats[wizardState.stepIndex];
+
+  // Barra step
+  const badges = `
+    <div class="wiz-steps">
+      <span class="wiz-step-badge done" onclick="wizReset()">${wizardState.disciplina}</span>
+      ${cats.map((cat,i) => {
+        const sel = wizardState.selezioni.find(s => s._stepCat === cat);
+        let cls = i === wizardState.stepIndex ? 'current' : (i < wizardState.stepIndex ? 'done' : '');
+        const label = sel ? `${wizLabelCat(cat)}: ${sel.descrizione.slice(0,18)}` : wizLabelCat(cat);
+        return `<span class="wiz-step-badge ${cls}" onclick="wizVaiStep(${i})">${label}</span>`;
+      }).join('')}
+      <span class="wiz-step-badge ${wizardState.stepIndex >= cats.length ? 'current':''}">Riepilogo</span>
+    </div>`;
+
+  // Step finale: riepilogo
+  if (wizardState.stepIndex >= cats.length) {
+    let totale = wizardState.selezioni.reduce((s,a) => s + a.prezzo_listino, 0);
+    c.innerHTML = badges + `
+      <div class="wiz-panel">
+        <div class="wiz-question">Riepilogo Configurazione</div>
+        <div class="wiz-sub">${wizardState.disciplina} — ${wizardState.selezioni.length} componenti selezionati</div>
+        <div class="wiz-summary">
+          ${wizardState.selezioni.map(s => `
+            <div class="wiz-summary-row">
+              <span class="ws-cat">${wizLabelCat(s._stepCat)}</span>
+              <span class="ws-prod">${s.descrizione}</span>
+              <span class="ws-price">${fmtEur(s.prezzo_listino)}</span>
+            </div>`).join('')}
+          <div class="wiz-total"><span>Totale Listino</span><span>${fmtEur(totale)}</span></div>
+        </div>
+        <div class="wiz-actions">
+          <button class="btn primary" onclick="wizCreaPreventivo()">✓ Crea Preventivo</button>
+          <button class="btn" onclick="wizVaiStep(0)">← Modifica</button>
+          <button class="btn wiz-skip" onclick="wizReset()">Ricomincia</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Se la categoria ha marche multiple e non ho ancora scelto la marca
+  const marche = WIZARD_MARCHE[wizardState.disciplina] && WIZARD_MARCHE[wizardState.disciplina][stepCat];
+  if (marche && !wizardState.marcaScelta) {
+    c.innerHTML = badges + `
+      <div class="wiz-panel">
+        <div class="wiz-question">${wizLabelCat(stepCat)} — Marca</div>
+        <div class="wiz-sub">Scegli prima la marca, poi vedrai solo i suoi modelli</div>
+        <div class="wiz-grid">
+          ${Object.keys(marche).map(m => `
+            <button class="wiz-card brand" onclick="wizScegliMarca('${m}')">
+              <div class="wc-title">${m}</div>
+            </button>`).join('')}
+        </div>
+        <div class="wiz-actions">
+          <button class="btn wiz-skip" onclick="wizSaltaStep()">Salta ${wizLabelCat(stepCat)} →</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Mostra i prodotti della categoria (eventualmente filtrati per marca)
+  let articoli = state.catalogo[wizardState.disciplina].articoli;
+  let listaCategorie;
+  if (marche && wizardState.marcaScelta) {
+    listaCategorie = marche[wizardState.marcaScelta];
+  } else {
+    listaCategorie = [stepCat];
+  }
+  const prodotti = articoli.filter(a => listaCategorie.includes(a.categoria) && a.prezzo_listino > 0);
+
+  c.innerHTML = badges + `
+    <div class="wiz-panel">
+      <div class="wiz-question">${wizLabelCat(stepCat)}${wizardState.marcaScelta ? ' — '+wizardState.marcaScelta : ''}</div>
+      <div class="wiz-sub">Seleziona il componente${prodotti.length===0 ? ' (nessun articolo disponibile)' : ''}</div>
+      <div class="wiz-grid">
+        ${prodotti.map((a,i) => `
+          <button class="wiz-card" onclick="wizScegliProdotto(${articoli.indexOf(a)})">
+            <div class="wc-cat">${a.categoria}</div>
+            <div class="wc-title">${a.descrizione}</div>
+            <div class="wc-price">${fmtEur(a.prezzo_listino)}</div>
+          </button>`).join('')}
+      </div>
+      <div class="wiz-actions">
+        ${wizardState.marcaScelta ? `<button class="btn" onclick="wizCambiaMarca()">← Cambia marca</button>` : ''}
+        <button class="btn wiz-skip" onclick="wizSaltaStep()">Salta ${wizLabelCat(stepCat)} →</button>
+      </div>
+    </div>`;
+}
+
+// Categorie effettive per la disciplina scelta (solo quelle che esistono)
+function catWizardCategorie() {
+  const arts = state.catalogo[wizardState.disciplina].articoli;
+  const presenti = [...new Set(arts.map(a => a.categoria))];
+  return WIZARD_STEPS_CATEGORIE.filter(cat => {
+    if (cat === 'Gruppo') return true; // sempre presente come step virtuale
+    return presenti.includes(cat);
+  });
+}
+
+function wizLabelCat(cat) {
+  if (cat === 'TELAIO / BICI') return 'Telaio';
+  if (cat === 'Gruppo') return 'Gruppo';
+  return cat.charAt(0) + cat.slice(1).toLowerCase();
+}
+
+function wizScegliDisciplina(d) {
+  wizardState.disciplina = d;
+  wizardState.stepIndex = 0;
+  wizardState.marcaScelta = null;
+  wizardState.selezioni = [];
+  renderWizard();
+}
+
+function wizScegliMarca(m) { wizardState.marcaScelta = m; renderWizard(); }
+function wizCambiaMarca() { wizardState.marcaScelta = null; renderWizard(); }
+
+function wizScegliProdotto(idx) {
+  const cats = catWizardCategorie();
+  const stepCat = cats[wizardState.stepIndex];
+  const art = state.catalogo[wizardState.disciplina].articoli[idx];
+  // rimuovi eventuale selezione precedente per questo step
+  wizardState.selezioni = wizardState.selezioni.filter(s => s._stepCat !== stepCat);
+  wizardState.selezioni.push({...art, _stepCat: stepCat});
+  wizardState.marcaScelta = null;
+  wizardState.stepIndex++;
+  renderWizard();
+}
+
+function wizSaltaStep() {
+  wizardState.marcaScelta = null;
+  wizardState.stepIndex++;
+  renderWizard();
+}
+
+function wizVaiStep(i) {
+  wizardState.stepIndex = i;
+  wizardState.marcaScelta = null;
+  renderWizard();
+}
+
+function wizReset() {
+  wizardState = { disciplina:null, stepIndex:0, marcaScelta:null, selezioni:[] };
+  renderWizard();
+}
+
+// Crea una bozza nel preventivo normale con le selezioni del wizard
+function wizCreaPreventivo() {
+  if (wizardState.selezioni.length === 0) { toast('Nessun componente selezionato'); return; }
+  const disc = wizardState.disciplina;
+  const arts = state.catalogo[disc].articoli;
+  // Assicura che esista la bozza per la disciplina
+  const draft = ensureDraft(disc);
+  // Azzera tutte le quantità
+  draft.quantita = new Array(arts.length).fill(0);
+  // Imposta quantità 1 per ogni componente selezionato
+  wizardState.selezioni.forEach(sel => {
+    const idx = arts.findIndex(a => a.categoria === sel.categoria && a.descrizione === sel.descrizione);
+    if (idx >= 0) draft.quantita[idx] = 1;
+  });
+  // Imposta la disciplina attiva nel preventivo
+  currentDisciplinaPreventivo = disc;
+  saveState();
+  toast('Preventivo creato dal wizard ⚡');
+  setView('preventivo');
+  renderPreventivo();
+}
+
+window.renderWizard = renderWizard;
+window.wizScegliDisciplina = wizScegliDisciplina;
+window.wizScegliMarca = wizScegliMarca;
+window.wizCambiaMarca = wizCambiaMarca;
+window.wizScegliProdotto = wizScegliProdotto;
+window.wizSaltaStep = wizSaltaStep;
+window.wizVaiStep = wizVaiStep;
+window.wizReset = wizReset;
+window.wizCreaPreventivo = wizCreaPreventivo;
+
 window.spostaArticolo = spostaArticolo;
 window.apriEditaArticolo = apriEditaArticolo;
 window.eliminaArticolo = eliminaArticolo;
