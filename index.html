@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- v1782839112 -->
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -2220,23 +2219,11 @@ function renderTotaliPreventivo() {
       <input type="text" class="text-wide" placeholder="Es. Tarmac SL6 Ultegra tg.54" value="${escapeHtml(prev.usato_descrizione || '')}" onchange="setPrevField('usato_descrizione', this.value, false)" style="max-width:60%">
     </div>
 
+    ${t.haUsatoCliente ? `
     <div class="label">Totale a Differenza</div>
     <div class="val">${fmtEur(t.diff_scontato)}</div>
     <div class="val">${fmtEur(t.diff_listino)}</div>
-
-    <div class="label">Rivendita Usato</div>
-    <div class="val"><input type="number" class="inline" min="0" step="50" value="${prev.rivendita_usato_scontato}" onchange="setPrevField('rivendita_usato_scontato', this.value)"></div>
-    <div class="val"><input type="number" class="inline" min="0" step="50" value="${prev.rivendita_usato_listino}" onchange="setPrevField('rivendita_usato_listino', this.value)"></div>
-
-    <hr class="divider">
-
-    <div class="label strong">Totale Incassato</div>
-    <div class="val huge">${fmtEur(t.incassato_scontato)}</div>
-    <div class="val huge">${fmtEur(t.incassato_listino)}</div>
-
-    <div class="label strong">Margine</div>
-    <div class="val strong ${t.margine_scontato >= 0 ? 'green' : 'red'}">${fmtEur(t.margine_scontato)}</div>
-    <div class="val strong ${t.margine_listino >= 0 ? 'green' : 'red'}">${fmtEur(t.margine_listino)}</div>
+    ` : ''}
 
     <hr class="divider">
 
@@ -2286,17 +2273,19 @@ function renderRiepilogoMargini(prev, t) {
         <span class="rg-val huge ${t.incasso_immediato >= 0 ? 'green' : 'red'}">${fmtEur(t.incasso_immediato)}</span>
         <span class="rg-pct"><span class="pct-badge big ${t.incasso_immediato_pct >= 0 ? 'green' : 'red'}">${fmtPctMargin(t.incasso_immediato_pct)}</span></span>
       </div>` : ''}
-      ${(prev.rivendita_usato_scontato || 0) > 0 ? `
-      <div class="rg-row">
-        <span class="rg-label">+ Rivendita Usato</span>
-        <span class="rg-val green">${fmtEur(prev.rivendita_usato_scontato || 0)}</span>
+      ${t.haUsatoCliente ? `
+      <div class="rg-row" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">
+        <span class="rg-label">Rivendita Usato (€)</span>
+        <span class="rg-val"><input type="number" class="inline" min="0" step="50" value="${prev.rivendita_usato_scontato}" onchange="setPrevField('rivendita_usato_scontato', this.value)" style="width:100px"></span>
         <span class="rg-pct"></span>
       </div>
+      ${(prev.rivendita_usato_scontato || 0) > 0 ? `
       <div class="rg-row big">
         <span class="rg-label strong">Totale Finale Incassato</span>
-        <span class="rg-val huge">${fmtEur((t.prezzo_finale_cliente - t.spese_spedizione) + (prev.rivendita_usato_scontato || 0))}</span>
+        <span class="rg-val huge">${fmtEur(t.prezzo_finale_cliente + (prev.rivendita_usato_scontato || 0))}</span>
         <span class="rg-pct"></span>
       </div>` : ''}
+      ` : ''}
     </div>
   `;
 }
